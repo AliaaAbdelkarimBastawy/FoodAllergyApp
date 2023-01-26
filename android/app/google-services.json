@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "449860720162",
+    "firebase_url": "https://allowed-gp-default-rtdb.firebaseio.com",
+    "project_id": "allowed-gp",
+    "storage_bucket": "allowed-gp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449860720162:android:ff0e35265ace27ec551c7b",
+        "android_client_info": {
+          "package_name": "com.example.graduationproject26_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449860720162-kgesnhct1bn7vf64uvquvo79b1g5lthp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4g7ZmeBJeq8VWToUi5jVfqdEdLXA7WWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449860720162-kgesnhct1bn7vf64uvquvo79b1g5lthp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

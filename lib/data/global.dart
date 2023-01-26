@@ -1,0 +1,2 @@
+
+int currentScreen = 0;
