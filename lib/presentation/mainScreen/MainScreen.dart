@@ -1,6 +1,11 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:graduationproject26_1/pages/home_page.dart';
+import '../../helper/helper_function.dart';
+import '../../service/auth_service.dart';
+import '../../service/database_service.dart';
+import '../Admin/AdminHomePage/AdminHomePage.dart';
 import '../BarcodeScreens/BarcodeScanner.dart';
 import '../CategoriesScreen/CategoriesScreen.dart';
 import '../HomeScreen/HomeScreen.dart';
@@ -15,7 +20,9 @@ import '../../data/homeScreen/homeScreenViewModel.dart';
 
 class MainScreen extends StatefulWidget {
    var Current;
-   MainScreen({super.key, required this.Current});
+   var drawer;
+   var arrow ;
+   MainScreen({super.key, required this.Current, required this.drawer,});
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -31,6 +38,16 @@ class Model2 {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  String userName = "";
+  String email = "";
+  AuthService authService = AuthService();
+
+  String getName = "";
+
+  String getEmail = "";
+
+  String getPassword = "";
   @override
   // TODO: implement widget
   final fb = FirebaseDatabase.instance.reference().child("Restaurants");
@@ -75,6 +92,48 @@ class _MainScreenState extends State<MainScreen> {
           Current_Index = index;
     });
   }
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  late DatabaseReference reference;
+  FirebaseDatabase db = FirebaseDatabase.instance;
+
+  var snapshotName;
+  var snapshotEmail;
+  var snapshotPassword;
+
+  Future<dynamic> getUserData() async {
+    final ref = FirebaseDatabase.instance.ref();
+    var authenVariable = auth.currentUser?.uid;
+    final fb = FirebaseDatabase.instance.reference().child("$authenVariable");
+
+    snapshotName = await ref.child('$authenVariable/UserData/Name').get();
+    snapshotEmail = await ref.child('$authenVariable/UserData/Email').get();
+    snapshotPassword = await ref.child('$authenVariable/UserData/Password').get();
+
+    setState(() {
+      getName = snapshotName.value.toString();
+      getEmail = snapshotEmail.value.toString();
+      getPassword = snapshotPassword.value.toString();
+    });
+
+  }
+
+
+
+  gettingUserData() async {
+    print("gettingUserData");
+    await HelperFunctions.getUserNameFromSF().then((val) {
+      setState(() {
+        userName = val!;
+      });
+    });
+    // getting the list of snapshots in our stream
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     if (widget.Current !=0)
@@ -87,27 +146,34 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        automaticallyImplyLeading: widget.drawer ,
           backgroundColor: Color(0xFF16CD54),
           title: Padding(
             padding: const EdgeInsets.only(left: 94.0),
             child: Text(ScreensTitles[Current_Index]),
           ),
       actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.chat,
-            color: Colors.white,
+        Visibility(
+          visible: widget.drawer,
+          child: IconButton(
+            icon: Icon(Icons.chat,
+              color: Colors.white,
+            ),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(profileVisible: true, CreateGroupButton: false,)));
+            },
           ),
-          onPressed: (){
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=> BarcodeScanner()));
-          },
         ),
-        IconButton(
-          icon: Icon(Icons.qr_code_scanner_sharp,
-            color: Colors.white,
+        Visibility(
+          visible: widget.drawer,
+          child: IconButton(
+            icon: Icon(Icons.qr_code_scanner_sharp,
+              color: Colors.white,
+            ),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> BarcodeScanner()));
+            },
           ),
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> BarcodeScanner()));
-          },
         ),
 
       ]
@@ -132,13 +198,14 @@ class _MainScreenState extends State<MainScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children:  [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: AssetImage('Assets/Images/profile1.png'),
+                      Icon(
+                        Icons.account_circle,
 
+                        size: 80,
+                        color: Colors.white,
                       ),
                       SizedBox(width: 10,),
-                      Text('Ahmed yasser',
+                      Text(userName,
                         style: TextStyle(fontSize:18,fontWeight: FontWeight.bold, color: Colors.white),),
                     ],
                   ),
@@ -255,6 +322,14 @@ class _MainScreenState extends State<MainScreen> {
       },
     );
   }
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+    gettingUserData();
+  }
+
 // --- Button Widget --- //
 }
 

@@ -1,6 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graduationproject26_1/presentation/Admin/AdminHomePage/AdminHomePage.dart';
+import '../../helper/helper_function.dart';
+import '../../pages/home_page.dart';
+import '../../service/auth_service.dart';
+import '../../service/database_service.dart';
+import '../../widgets/widgets.dart';
 import '../HomeScreen/HomeScreen.dart';
 import '../forgetPasswordScreen/forgetPasswordScreen.dart';
 import '../mainScreen/MainScreen.dart';
@@ -13,6 +20,12 @@ class loginScreen extends StatefulWidget
 }
 
 class _loginScreenState extends State<loginScreen> {
+
+  final formKey = GlobalKey<FormState>();
+  String email = "";
+  String password = "";
+  bool _isLoading = false;
+  AuthService authService = AuthService();
 
   var EmailController = TextEditingController();
 
@@ -27,9 +40,7 @@ class _loginScreenState extends State<loginScreen> {
     EmailController.dispose();
     PasswordController.dispose();
     super.dispose();
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -203,15 +214,73 @@ class _loginScreenState extends State<loginScreen> {
         ),
     );
   }
-  Future SignIn() async{
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: EmailController.text.trim(),
-        password: PasswordController.text.trim(),
+  // Future SignIn() async{
+  //   await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //       email: EmailController.text.trim(),
+  //       password: PasswordController.text.trim(),
+  //   );
+  //   if (EmailController.text.toString() == "Admin1@yahoo.com" && PasswordController.text.toString() == "12345678")
+  //     {
+  //       print("ADMIN");
+  //       Navigator.push(context, MaterialPageRoute(builder: (context)=> AdminHomePage()));
+  //
+  //     }
+  //
+  //   else
+  //     {
+  //       print("USER");
+  //       Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0,
+  //         drawer: true,)));
+  //
+  //     }
+  //
+  //
+  // }
 
-    );
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0)));
 
 
+  SignIn() async {
+    if (FormKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      await authService
+          .loginWithUserNameandPassword(EmailController.text, PasswordController.text)
+          .then((value) async {
+        if (value == true) {
+          QuerySnapshot snapshot =
+          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+              .gettingUserData(EmailController.text);
+          // saving the values to our shared preferences
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(EmailController.text);
+          await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
+          
+          if(EmailController.text == "aly@yahoo.com" && PasswordController.text == "12345678")
+            {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                return HomePage(profileVisible: false, CreateGroupButton: true,);
+              }));
+
+
+              // nextScreenReplace(context,  HomePage(profileVisible: false, CreateGroupButton: true,));
+            }
+          else
+            {
+
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                return MainScreen(Current: 0, drawer: true);
+              }));
+
+            }
+        } else {
+          showSnackbar(context, Colors.red, value);
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
+    }
   }
   
 }

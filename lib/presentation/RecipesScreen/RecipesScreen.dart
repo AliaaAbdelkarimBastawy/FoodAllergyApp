@@ -55,7 +55,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
 
     Names.clear();
     Images.clear();
-    for (int i = 1; i < 8; i++) {
+    for (int i = 1; i < 9; i++) {
       snapshot  = await ref.child('Recipes/Recipe$i/Name').get();
       snapshot2 = await ref.child('Recipes/Recipe$i/image').get();
       snapshot3 = await ref.child('Recipes/Recipe$i/ContainedAllergyType').get();
@@ -145,48 +145,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
     );
   }
 
-  // Widget buildStartScreensItem(recipeModel model) => Padding(
-  //     padding: const EdgeInsets.all(8),
-  //     child: Material(
-  //       child: GestureDetector(
-  //         onTap: (){
-  //           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RecipeDetailScreen(detailsModel: model,)));
-  //         },
-  //         child: Container(
-  //           decoration: BoxDecoration(
-  //             borderRadius: BorderRadius.circular(20),
-  //             // color: Color(0xFFFBF6F0),
-  //             color: Colors.white,
-  //             boxShadow: [
-  //               BoxShadow(
-  //                 color: Colors.grey.withOpacity(0.5),
-  //                 spreadRadius: 5,
-  //                 blurRadius: 7,
-  //                 offset: Offset(0, 3), // changes position of shadow
-  //               ),
-  //             ],
-  //           ),
-  //
-  //           // clipBehavior: Clip.antiAliasWithSaveLayer,
-  //           width: 80,
-  //           height: 100,
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Center(child: model.image),
-  //               // SizedBox(height: 8,),
-  //               Center(
-  //                   child: Text(
-  //                     '${model.Name}',
-  //                     style: TextStyle(
-  //                       fontSize: 14,
-  //                     ),
-  //                   )),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ));
 
   Widget buildStartScreensItem(recipeModel model) => Padding(
     padding: const EdgeInsets.fromLTRB(8,8,4,8),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/CategoriesScreen/CategoriesScreenViewModel.dart';
+import '../profileScreen/profileScreen.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({Key? key}) : super(key: key);
@@ -11,284 +12,110 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  List<CategoriesViewModel> FishList = [
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
+  List<CategoriesViewModel> Products = [
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/almond.jpeg'),
+      title: "Chicken Tortella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/oatmilk.jpeg'),
+      title: "Chicken Tortella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/soy milk.jpeg'),
+      title: "Chicken Tortella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/Juhalmond.jpeg'),
+      title: "Chicken Tortella",
+    ),
   ];
 
-  List<CategoriesViewModel> MilkList = [
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
+  List<CategoriesViewModel> Menus = [
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
   ];
 
-  List<CategoriesViewModel> BakeryList = [
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
+  List<CategoriesViewModel> recipes = [
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
+    CategoriesViewModel(
+      imageProvider: AssetImage('Assets/Images/img.png'),
+      title: "Nutella",
+    ),
   ];
 
-  List<CategoriesViewModel> ProteinList = [
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-  ];
-
-  List<CategoriesViewModel> GrainsList = [
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-  ];
-
-  List<CategoriesViewModel> FruitList = [
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-  ];
-
-  List<CategoriesViewModel> EggsList = [
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-    CategoriesViewModel(imageProvider: AssetImage('Assets/Images/img.png'),
-      title: "Nutella",),
-  ];
   /// List of Tab Bar Item
   List<String> items = [
-    "All Categories",
+    "Products",
     "Recipes",
     "Menus",
   ];
-  List<String> titles=[
-    "All Categories",
+  List<String> titles = [
+    "Products",
     "Recipes",
-    "Menus",];
+    "Menus",
+  ];
   int current = 0;
 
   int Current_Index = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   void _onItemTapped(int index) {
     setState(() {
       Current_Index = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    List<List<CategoriesViewModel>> Lists= [MilkList, BakeryList, ProteinList,FishList, GrainsList, FruitList, EggsList];
+    List<List<CategoriesViewModel>> Lists = [Products, Menus, recipes];
     var ListSelected = Lists[0];
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()));
+          },
+        ),
         backgroundColor: Color(0xFF16CD54),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 95.0),
+        title: const Padding(
+          padding: EdgeInsets.only(left: 95.0),
           child: Text("Favorites"),
         ),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 20.0),
+            padding: EdgeInsets.only(right: 20.0),
             child: Icon(Icons.qr_code_scanner_sharp),
           ),
         ],
@@ -369,22 +196,26 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               padding: EdgeInsets.all(8),
               child: SizedBox(
                 height: 500,
-                child: GridView.builder(itemBuilder: (context, index)=> buildStartScreensItem( Lists[current][index]),
+                child: GridView.builder(
+                  itemBuilder: (context, index) =>
+                      buildStartScreensItem(Lists[current][index]),
                   itemCount: ListSelected.length,
-                  scrollDirection: Axis.vertical, gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 220,
-                      childAspectRatio: 3/2,
-                      crossAxisSpacing: 20, mainAxisSpacing: 20
-                  ),),
+                  scrollDirection: Axis.vertical,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 1 / 0.95,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 15),
+                ),
               ),
             ),
           ],
         ),
       ),
     );
-
   }
-  Widget buildStartScreensItem(CategoriesViewModel model)=> Padding(
+
+  Widget buildStartScreensItem(CategoriesViewModel model) => Padding(
     padding: const EdgeInsets.all(8),
     child: Material(
       // elevation: 10,
@@ -408,16 +239,24 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-
-                child: Image(image: model.imageProvider, width: 110, height: 80,)),
-            SizedBox(height: 8,),
-            Center(child: Text('${model.title}', style: TextStyle( fontSize: 14,),)),
-
+                child: Image(
+                  image: model.imageProvider,
+                  width: 110,
+                  height: 80,
+                )),
+            SizedBox(
+              height: 8,
+            ),
+            Center(
+                child: Text(
+                  '${model.title}',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                )),
           ],
         ),
       ),
     ),
   );
-
 }
-

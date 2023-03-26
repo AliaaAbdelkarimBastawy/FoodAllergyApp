@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeNotifer with ChangeNotifier {
   final ImagePicker picker = ImagePicker();
@@ -19,7 +20,6 @@ class HomeNotifer with ChangeNotifier {
       {required BuildContext context, required ImageSource source}) async {
     final pickedUserImage = await picker.pickImage(source: source);
     userImage = File(pickedUserImage!.path);
-
     if (userImage != null) {
       finalText = '';
       userImage = await ImageCropper().cropImage(
@@ -45,7 +45,9 @@ class HomeNotifer with ChangeNotifier {
       loading = true;
       notifyListeners();
     } else {
+
       loading = false;
+      print("NULLLLLLL");
       notifyListeners();
 
     }

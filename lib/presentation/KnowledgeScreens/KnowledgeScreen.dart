@@ -73,7 +73,7 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
         ),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              MainScreen(Current: 0,)));
+              MainScreen(Current: 0, drawer: 1,)));
         },
       ),
       title: Padding(padding: EdgeInsets.only(left: 80),

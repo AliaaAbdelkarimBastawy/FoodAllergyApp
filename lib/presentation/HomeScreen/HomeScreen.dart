@@ -10,7 +10,7 @@ import '../MenuScreen/MenuScreen.dart';
 import '../RecipesScreen/RecipesScreen.dart';
 import '../loginScreen/loginScreen.dart';
 import '../recipesDetails/recipes_Details.dart';
-import 'globals.dart' as globals;
+
 
 
 class HomeScreen extends StatefulWidget {
@@ -71,7 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<ModelCategory> BakeryList = [],
       MilkList = [],
       ProteinList = [],
-      SnacksList = [], MergeList=[];
+      SnacksList = [],
+
+      MergeList=[ModelCategory(Name: "Nutella",
+      image:Image.network(
+  "https://firebasestorage.googleapis.com/v0/b/allowed-gp.appspot.com/o/Images%2FNutella%20Ferrero%20Hazelnut%20Spread%20With%20Cocoa.jpg?alt=media&token=d126e8ba-ee43-4f87-aa5c-d7e825c9c690",
+  width: 80,
+  height: 80,
+  ),
+      description: "Make your breakfast interesting with Nutella hazelnut spread with cocoa.  Packed with the richness of selected hazelnuts and delicious cocoa, it is the most trusted breakfast spread brand across the world.  Nutella can be easily spread over bread, roti, dosa or idli and variety of other breakfast dishes.  It is 100% vegetarian and contains no preservatives.",
+      containedOf: "Hazelnut, Milk")];
 
 
 
@@ -110,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
     RecipesList.clear();*/
 
     BakeryList.clear();
+    MergeList.clear();
 
     final ref = FirebaseDatabase.instance.ref();
     var snapshot;
@@ -216,10 +226,30 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             description: BakeryDescription[i],
             containedOf: BakeryAllergyContained[i]
-        ),
+        ),);
+        MergeList.add(new ModelCategory(
+            Name: BakeryNames[i],
+            image: Image.network(
+              BakeryImages[i],
+              width: 80,
+              height: 80,
+            ),
+            description: BakeryDescription[i],
+            containedOf: BakeryAllergyContained[i]
+        ),);
 
-        );
         MilkList.add(new ModelCategory(
+            Name: MilkNames[i],
+            image: Image.network(
+              MilkImages[i],
+              width: 80,
+              height: 80,
+            ),
+            description: MilkDescription[i],
+            containedOf: MilkAllergyContained[i]
+
+        ));
+        MergeList.add(new ModelCategory(
             Name: MilkNames[i],
             image: Image.network(
               MilkImages[i],
@@ -241,6 +271,17 @@ class _HomeScreenState extends State<HomeScreen> {
             description: ProteinDescription[i],
             containedOf: ProteinAllergyContained[i]
         ));
+        MergeList.add(new ModelCategory(
+            Name: ProteinsNames[i],
+            image: Image.network(
+              ProteinsImages[i],
+              width: 70,
+              height: 70,
+            ),
+            description: ProteinDescription[i],
+            containedOf: ProteinAllergyContained[i]
+        ));
+
         SnacksList.add(new ModelCategory(
             Name: SnacksNames[i],
             image: Image.network(
@@ -251,6 +292,17 @@ class _HomeScreenState extends State<HomeScreen> {
             description: SnacksDescription[i],
             containedOf: SnacksAllergyContained[i]
         ));
+        MergeList.add(new ModelCategory(
+            Name: SnacksNames[i],
+            image: Image.network(
+              SnacksImages[i],
+              width: 70,
+              height: 70,
+            ),
+            description: SnacksDescription[i],
+            containedOf: SnacksAllergyContained[i]
+        ));
+
       });
     }
 
@@ -292,9 +344,6 @@ class _HomeScreenState extends State<HomeScreen> {
       MenuList3[i-1].add(listmenu[1]);
       MenuList3[i-1].add(listmenu[2]);
 
-      globals.MenuList3[i-1].add(listmenu[0]);
-      globals.MenuList3[i-1].add(listmenu[1]);
-      globals.MenuList3[i-1].add(listmenu[2]);
 
       print("MENU LIST 3333" );
       print(MenuList3.length);
@@ -374,12 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < Names.length; i++) {
-      globals.items.add(items[i]);
-      globals.items1.add(items[i]);
-      globals.Names.add(Names[i]);
-      globals.Images.add(Images[i]);
-    }
+
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: Padding(
@@ -402,8 +446,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Expanded(
-                child: ListView.separated(itemBuilder: (context, index)=> buildStartScreensItem1(SnacksList[index]),
-                    itemCount: MilkList.length,
+                child: ListView.separated(itemBuilder: (context, index)=> buildStartScreensItem1(MergeList[index]),
+                    itemCount: MergeList.length,
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) =>
                         Divider(
@@ -493,15 +537,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildList() => Expanded(
     child: Container(
       child: ListView.builder(
-          itemCount: globals.items.length,
+          itemCount: items.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                print(globals.items[index]);
+                print(items[index]);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AllergenMenuScreen(
-                      detailsModel: globals.items[index],
+                      detailsModel:items[index],
                     )));
               },
               child: Column(
@@ -520,12 +564,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Center(child: globals.items[index].image),
+                                  child: Center(child: items[index].image),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
-                                    globals.items[index].title,
+                                    items[index].title,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontSize: 15,

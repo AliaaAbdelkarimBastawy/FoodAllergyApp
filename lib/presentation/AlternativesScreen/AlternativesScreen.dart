@@ -63,6 +63,7 @@ class _AlternativesScreenState extends State<AlternativesScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    backgroundColor: Colors.white,
     appBar: AppBar(
       backgroundColor: Colors.white,
       leading: Icon(

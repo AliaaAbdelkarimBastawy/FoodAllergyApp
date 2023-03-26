@@ -8,9 +8,14 @@ import '../presentation/BarcodeScreens/AlcoholNotDetected.dart';
 import '../presentation/BarcodeScreens/BarcodeScanner.dart';
 import 'home.notifer.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+class HomeView extends StatefulWidget {
+   HomeView({Key? key}) : super(key: key);
 
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -98,9 +103,18 @@ class HomeView extends StatelessWidget {
                       SizedBox(
                         height: 180,
                         width: MediaQuery.of(context).size.width,
-                        child: Image.file(
+                        child: Provider.of<HomeNotifer>(context, listen: false)
+                            .getUserImage!=null
+                      ? Image.file(
                             Provider.of<HomeNotifer>(context, listen: false)
-                                .getUserImage!),
+                                .getUserImage!)
+                        :
+                        const Icon(
+                          Icons.camera_alt,
+                          size: 80,
+                          color: Colors.white,
+                        ),
+
                       ),
                       const SizedBox(
                         height: 20,
@@ -121,35 +135,43 @@ class HomeView extends StatelessWidget {
                         height: 5,
                       ),
 
-                      Container(
-                        margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                        width: double.infinity,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: MaterialButton(                        onPressed: () async {
-                          print("OUTTTTTTTTTTTT");
-                          print(await Provider.of<HomeNotifer>(context, listen: false)
-                              .getImageFromText(context: context));
-                          if (await Provider.of<HomeNotifer>(context, listen: false)
-                              .getImageFromText(context: context) == 1)
-                          {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => AlcoholDetected()));
-                          }
+                      Visibility(
+                        visible: Provider.of<HomeNotifer>(context, listen: false)
+                            .getUserImage!=null? true : false,
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                          width: double.infinity,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: MaterialButton(
+                            onPressed: Provider.of<HomeNotifer>(context, listen: false)
+                                .getUserImage!=null? () async {
+                            print(await Provider.of<HomeNotifer>(context, listen: false)
+                                .getImageFromText(context: context));
+                            if (await Provider.of<HomeNotifer>(context, listen: false)
+                                .getImageFromText(context: context) == 1)
+                            {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => AlcoholDetected()));
+                            }
 
-                          else
-                          {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => AlcoholNotDetected()));
-                          }
-                        },
-                          child: Text("Scan",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,),),
-                          color: Color(0xFF16CD54),),),
+                            else
+                            {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => AlcoholNotDetected()));
+                            }
+                          } : ()
+                            {
+
+                            },
+                            child: Text("Scan",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,),),
+                            color: Color(0xFF16CD54)),),
+                      ),
                     ],
                   ),
                 )

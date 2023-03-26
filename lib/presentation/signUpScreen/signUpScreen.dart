@@ -1,12 +1,19 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../helper/helper_function.dart';
+import '../../pages/home_page.dart';
+import '../../service/auth_service.dart';
+import '../../widgets/widgets.dart';
 import '../SelectAllergyScreen/SelectAlleryScreen.dart';
 import '../loginScreen/loginScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
-
+  var UsernameController = TextEditingController();
+  var EmailController = TextEditingController();
+  var PasswordController = TextEditingController();
   SignUpScreen({Key? key}) : super(key: key);
 
 
@@ -16,6 +23,15 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+
+
+  bool _isLoading = false;
+  final formKey = GlobalKey<FormState>();
+  String email = "";
+  String password = "";
+  String fullName = "";
+  AuthService authService = AuthService();
+
   var UsernameController = TextEditingController();
   var EmailController = TextEditingController();
   var PasswordController = TextEditingController();
@@ -24,9 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLogin = true;
   bool check= false;
 
-
   void toggle() => setState(() => isLogin = !isLogin);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,7 +153,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: 0.5,
                               color: Color(0xFF16CD54)),),),
                       keyboardType: TextInputType.visiblePassword,),),
-
                   SizedBox(
                     height: 10,),
                   Padding(
@@ -200,29 +213,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
 
-  Future SignUp() async {
+  // Future SignUp() async {
+  //   try {
+  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //       email: EmailController.text.trim(),
+  //       password: PasswordController.text.trim(),
+  //     );
+  //
+  //     Navigator.push(context, MaterialPageRoute(
+  //         builder: (context) => SelectAllergyScreen(EmailController:
+  //         EmailController, UsernameController: UsernameController,
+  //           PasswordController: PasswordController,)));
+  //   } on FirebaseAuthException catch (e) {
+  //     print(e);
+  //   }
+  //
+  // }
 
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: EmailController.text.trim(),
-        password: PasswordController.text.trim(),
-      );
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => SelectAllergyScreen()));
-    } on FirebaseAuthException catch (e) {
-      print(e);
-      // Fluttertoast.showToast(
-      //     msg: "The email address is already in use by another account.",
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.red,
-      //     textColor: Colors.white,
-      //     fontSize: 16.0
-      // );
-
+  SignUp() async {
+    if (FormKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      await authService
+          .registerUserWithEmailandPassword(UsernameController.text, EmailController.text,
+          PasswordController.text)
+          .then((value) async {
+        if (value == true) {
+          // saving the shared preference state
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(EmailController.text);
+          await HelperFunctions.saveUserNameSF(UsernameController.text);
+          nextScreenReplace(context,  SelectAllergyScreen(EmailController:
+          EmailController, UsernameController: UsernameController,
+            PasswordController: PasswordController,));
+        } else {
+          showSnackbar(context, Colors.red, value);
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
     }
-
   }
+
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  late DatabaseReference reference;
+  FirebaseDatabase db = FirebaseDatabase.instance;
+
+
+
+
 }

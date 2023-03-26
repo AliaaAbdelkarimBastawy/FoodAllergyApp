@@ -1,7 +1,7 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'globals.dart' as globals;
+
 import 'AllergenMenuScreen.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _MenuScreen extends State<MenuScreen> {
     Names.clear();
     Images.clear();
     MenuList2.clear();
-    for (int i = 1; i < 5; i++) {
+    for (int i = 1; i < 6; i++) {
 
       snapshot = await ref.child('Restaurants/Restaurant$i/Name').get();
       snapshot2 = await ref.child('Restaurants/Restaurant$i/image').get();
@@ -86,12 +86,6 @@ class _MenuScreen extends State<MenuScreen> {
       MenuList3[i-1].add(list[0]);
       MenuList3[i-1].add(list[1]);
       MenuList3[i-1].add(list[2]);
-      globals.MenuList3[i-1].add(list[0]);
-      globals.MenuList3[i-1].add(list[1]);
-      globals.MenuList3[i-1].add(list[2]);
-
-
-
       print("MENU LIST 3333" );
       print(MenuList3.length);
       print(MenuList3[i].length);
@@ -104,6 +98,8 @@ class _MenuScreen extends State<MenuScreen> {
     }
 
     for (int i = 0; i < Names.length; i++) {
+
+
       setState(() {
         items.add(Model(
           title: Names[i],
@@ -130,17 +126,9 @@ class _MenuScreen extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < Names.length; i++) {
-      globals.items.add(items[i]);
-      globals.items1.add(items[i]);
-      globals.Names.add(Names[i]);
-      globals.Images.add(Images[i]);
-    }
-
     return Scaffold(
       body: Column(
-        children: [
-          Container(
+        children: [Container(
           height: 50,
           margin: const EdgeInsets.fromLTRB(15, 15, 15, 25),
           child: TextFormField(
@@ -178,14 +166,14 @@ class _MenuScreen extends State<MenuScreen> {
               crossAxisCount: 2,
               mainAxisSpacing: 15,
               childAspectRatio: 1 / 1),
-          itemCount: globals.items.length,
+          itemCount: items.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                print(globals.items[index]);
+                print(items[index]);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AllergenMenuScreen(
-                      detailsModel: globals.items[index],
+                      detailsModel: items[index],
                     )));
               },
               child: Card(
@@ -198,9 +186,9 @@ class _MenuScreen extends State<MenuScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      globals.items[index].image,
+                      items[index].image,
                       Text(
-                        globals.items[index].title,
+                        items[index].title,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 25,
@@ -218,50 +206,27 @@ class _MenuScreen extends State<MenuScreen> {
     ),
   );
 
-
   @override
   void initState() {
     super.initState();
-    if (globals.NumberOfReload == 0)
-    {
-      getCurrentUserInfo();
-      globals.NumberOfReload =  globals.NumberOfReload +1;
-    }
-    else
-    {
-      globals.NumberOfReload =  globals.NumberOfReload +1;
-    }
+    getCurrentUserInfo();
   }
 
   Future<void> search(String text) async {
-    globals.items.clear();
-    if (text !="")
-    {
-      globals.items.clear();
-      for (int i = 0; i < globals.Names.length; i++) {
-        setState(() {
-          if (globals.Names[i].contains(text)) {
-            globals.items.add(new Model(
-                title: globals.Names[i],
-                image: Image.network(
-                  globals.Images[i],
-                  width: 150,
-                  height: 150,
-                ),
-                MenuList: globals.MenuList3[i]));}
-        });
-      }
+    items.clear();
+    for (int i = 0; i < Names.length; i++) {
+      setState(() {
+        if (Names[i].contains(text)) {
+          items.add(new Model(
+              title: Names[i],
+              image: Image.network(
+                Images[i],
+                width: 150,
+                height: 150,
+              ),
+              MenuList: MenuList3[i]));
+        }
+      });
     }
-    else if(text == "")
-    {
-      for (int j =0; j<globals.items1.length;j++)
-      {
-        setState(() {
-          globals.items.add(globals.items1[j]);
-        });
-      }
-    }
-
   }
 }
-

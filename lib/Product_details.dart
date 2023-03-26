@@ -161,7 +161,7 @@ class Product_details extends StatelessWidget {
             ),
             onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                  MainScreen(Current: 0)));
+                  MainScreen(Current: 0, drawer: true,)));
 
 
 

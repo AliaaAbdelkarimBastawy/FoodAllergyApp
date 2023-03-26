@@ -76,7 +76,7 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
           ),
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                MainScreen(Current: 0)));
+                MainScreen(Current: 0, drawer: true,)));
           },
         ),
         elevation: 0,

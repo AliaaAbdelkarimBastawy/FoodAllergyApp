@@ -47,7 +47,7 @@ class RecipeDetailScreen extends StatelessWidget {
           ),
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                MainScreen(Current: 0)));
+                MainScreen(Current: 0, drawer: 1,)));
 
           },
         ),

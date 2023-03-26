@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 final FirebaseAuth auth = FirebaseAuth.instance;
 final User? user = auth.currentUser;
 
@@ -16,6 +17,20 @@ class HomeNotifer with ChangeNotifier {
   List<String> Allergies=["Almonds","Corn","Crustaceans","Eggs","Fish","Gluten","MILK","Nut","Peanut","Soy","Strawberry","Wheat"];
   List<String> AllergiesValue=[];
   List<String> TrueAllergies=[];
+
+
+  Future<void> _ImageSharedPreference() async {
+
+    SharedPreferences prefss = await SharedPreferences.getInstance();
+    prefss.setBool('Image', true);
+  }
+
+  Future<void> _ImageSharedPreference2() async {
+
+    SharedPreferences prefss = await SharedPreferences.getInstance();
+    prefss.setBool('Image', false);
+  }
+
 
   final ImagePicker picker = ImagePicker();
   File? userImage;
@@ -36,6 +51,7 @@ class HomeNotifer with ChangeNotifier {
   var Soysnapshot;
   var Strawberrysnapshot;
   var Wheatsnapshot;
+
 
 // Method to choose a image from gallery or can use camera
   Future pickUserImage(

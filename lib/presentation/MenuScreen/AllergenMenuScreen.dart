@@ -37,8 +37,7 @@ class AllergenMenuScreen extends StatelessWidget {
           color: Colors.white,
           child: ListView(
             children: [
-
-
+              SizedBox(height: 10,),
               Row(
                 children: [
                   Container(
@@ -85,8 +84,7 @@ class AllergenMenuScreen extends StatelessWidget {
             ),
             onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                  MainScreen(Current: 0)));
-
+                  MainScreen(Current: 0, drawer: 1,)));
             },
           ),
           elevation: 0,

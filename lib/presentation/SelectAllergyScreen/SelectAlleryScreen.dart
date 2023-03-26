@@ -8,7 +8,11 @@ import '../mainScreen/MainScreen.dart';
 
 
 class SelectAllergyScreen extends StatefulWidget {
-   SelectAllergyScreen({Key? key}) : super(key: key);
+  var UsernameController;
+  var EmailController;
+  var PasswordController;
+
+  SelectAllergyScreen({Key? key, required this.EmailController, required this.UsernameController, required this.PasswordController}) : super(key: key);
 
   @override
   State<SelectAllergyScreen> createState() => _SelectAllergyScreen();
@@ -231,7 +235,9 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                         || Wheat || Gluten || Almonds || Crustaceans)
                       {
                         inputData();
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0)));
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0,
+                          drawer: true,)));
                         }
 
                     else
@@ -240,7 +246,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                       }
                       },
 
-                 child: Text("Continue",
+                 child: Text("Sign Up",
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,),),),
@@ -300,8 +306,19 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
         "Almonds Allergy": Almonds,
         "Crustaceans Allergy": Crustaceans,
 
-      }
+      },
+
     });
+
+    var authenVariable= auth.currentUser?.uid;
+    final fb = FirebaseDatabase.instance.reference().child("$authenVariable");
+    Map<String, String> DataOfUser =
+    {
+      'Name' : widget.UsernameController.text,
+      'Email' : widget.EmailController.text,
+      'Password' : widget.PasswordController.text,
+    };
+    fb.child("UserData").set(DataOfUser);
 
   }
 }

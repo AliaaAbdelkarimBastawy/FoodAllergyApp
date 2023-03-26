@@ -102,9 +102,16 @@ class HomeView extends StatelessWidget {
                       SizedBox(
                         height: 180,
                         width: MediaQuery.of(context).size.width,
-                        child: Image.file(
+                        child: Provider.of<HomeNotifer>(context, listen: false)
+                            .getUserImage!=null? Image.file(
                             Provider.of<HomeNotifer>(context, listen: false)
-                                .getUserImage!),
+                                .getUserImage!)
+                            :
+                        const Icon(
+                          Icons.camera_alt,
+                          size: 80,
+                          color: Colors.white,
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -125,33 +132,37 @@ class HomeView extends StatelessWidget {
                         height: 5,
                       ),
 
-                      Container(
-                        margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                        width: double.infinity,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: MaterialButton(
-                          onPressed: () async {
-                          if (await Provider.of<HomeNotifer>(context, listen: false)
-                              .getImageFromText_2(context: context) == 1)
-                          {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => NotSafe()));
-                          }
+                      Visibility(
+                        visible: Provider.of<HomeNotifer>(context, listen: false)
+                            .getUserImage!=null? true : false,
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                          width: double.infinity,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: MaterialButton(
+                            onPressed: () async {
+                            if (await Provider.of<HomeNotifer>(context, listen: false)
+                                .getImageFromText_2(context: context) == 1)
+                            {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => NotSafe()));
+                            }
 
-                          else
-                          {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => Safe()));
-                          }
-                        },
-                          child: Text("Scan",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,),),
-                          color: Color(0xFF16CD54),),),
+                            else
+                            {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => Safe()));
+                            }
+                          },
+                            child: Text("Scan",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,),),
+                            color: Color(0xFF16CD54),),),
+                      ),
                     ],
                   ),
                 )
