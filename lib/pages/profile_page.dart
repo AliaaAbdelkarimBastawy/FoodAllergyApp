@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../service/auth_service.dart';
 import '../widgets/widgets.dart';
-import 'auth/login_page.dart';
 import 'home_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -24,8 +24,8 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
-        title: const Text(
-          "Profile",
+        title:  Text(
+          "Profile".tr,
           style: TextStyle(
               color: Colors.white, fontSize: 27, fontWeight: FontWeight.bold),
         ),
@@ -60,8 +60,8 @@ class _ProfilePageState extends State<ProfilePage> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             leading: const Icon(Icons.group),
-            title: const Text(
-              "Groups",
+            title:  Text(
+              "Groups".tr,
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -72,8 +72,8 @@ class _ProfilePageState extends State<ProfilePage> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             leading: const Icon(Icons.group),
-            title: const Text(
-              "Profile",
+            title:  Text(
+              "Profile".tr,
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -84,8 +84,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text("Logout"),
-                      content: const Text("Are you sure you want to logout?"),
+                      title:  Text("Logout".tr),
+                      content:  Text("Are you sure you want to logout?".tr),
                       actions: [
                         IconButton(
                           onPressed: () {
@@ -99,10 +99,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         IconButton(
                           onPressed: () async {
                             await authService.signOut();
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()),
-                                (route) => false);
+                            // Navigator.of(context).pushAndRemoveUntil(
+                            //     MaterialPageRoute(
+                            //         builder: (context) => const LoginPage()),
+                            //     (route) => false);
                           },
                           icon: const Icon(
                             Icons.done,
@@ -116,8 +116,8 @@ class _ProfilePageState extends State<ProfilePage> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             leading: const Icon(Icons.exit_to_app),
-            title: const Text(
-              "Logout",
+            title:  Text(
+              "Logout".tr,
               style: TextStyle(color: Colors.black),
             ),
           )
@@ -149,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Email", style: TextStyle(fontSize: 17)),
+                 Text("Email".tr, style: TextStyle(fontSize: 17)),
                 Text(widget.email, style: const TextStyle(fontSize: 17)),
               ],
             ),

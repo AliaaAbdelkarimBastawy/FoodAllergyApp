@@ -14,9 +14,11 @@ class HomeNotifer with ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   late DatabaseReference reference;
   FirebaseDatabase db = FirebaseDatabase.instance;
-  List<String> Allergies=["Almonds","Corn","Crustaceans","Eggs","Fish","Gluten","MILK","Nut","Peanut","Soy","Strawberry","Wheat"];
+  List<String> Allergies=["Whey","Casein","Egg yolks","Egg White","Almonds","Corn","Crustaceans","Eggs","Fish","Gluten","MILK","Nut","Peanut","Soy","Strawberry","Wheat"];
   List<String> AllergiesValue=[];
+  List<String> FinalTrueAllergies=[];
   List<String> TrueAllergies=[];
+
 
 
   Future<void> _ImageSharedPreference() async {
@@ -51,6 +53,12 @@ class HomeNotifer with ChangeNotifier {
   var Soysnapshot;
   var Strawberrysnapshot;
   var Wheatsnapshot;
+
+
+  var EggWhitessnapshot;
+  var EggYolksnapshot;
+  var MilkWheysnapshot;
+  var MilkCaseinsnapshot;
 
 
 // Method to choose a image from gallery or can use camera
@@ -92,13 +100,46 @@ class HomeNotifer with ChangeNotifier {
     if (userImage != null) {
       final inputImage = InputImage.fromFile(userImage!);
       // Function that takes [InputImage] processes it and returns a [RecognisedText] object.
-      final RecognisedText recognisedText =
-      await textDetector.processImage(inputImage);
-      String text = recognisedText.text;
+      final RecognisedText recognisedText = await textDetector.processImage(inputImage);
+      String text = recognisedText.text.toLowerCase();
+      print(text);
       final User? user = auth.currentUser;
       final uid = user?.uid;
       print(uid);
       reference = db.ref();
+
+
+
+
+
+      MilkWheysnapshot  = await reference.child('$uid/Allergies/MilkWhey Allergy').get();
+      print("SNAPSHOT ------- Allergy");
+      print(MilkWheysnapshot.value.toString());
+      AllergiesValue.add(MilkWheysnapshot.value.toString());
+
+
+
+      MilkCaseinsnapshot  = await reference.child('$uid/Allergies/MilkCasein Allergy').get();
+      print("SNAPSHOT ------- Allergy");
+      print(MilkCaseinsnapshot.value.toString());
+      AllergiesValue.add(MilkCaseinsnapshot.value.toString());
+
+
+
+      EggYolksnapshot  = await reference.child('$uid/Allergies/EggYolk Allergy').get();
+      print("SNAPSHOT ------- Allergy");
+      print(EggYolksnapshot.value.toString());
+      AllergiesValue.add(EggYolksnapshot.value.toString());
+
+
+
+      EggWhitessnapshot  = await reference.child('$uid/Allergies/EggWhite Allergy').get();
+      print("SNAPSHOT ------- Allergy");
+      print(EggWhitessnapshot.value.toString());
+      AllergiesValue.add(EggWhitessnapshot.value.toString());
+
+
+
 
       Almondssnapshot  = await reference.child('$uid/Allergies/Almonds Allergy').get();
       print("SNAPSHOT ------- Allergy");
@@ -181,21 +222,58 @@ class HomeNotifer with ChangeNotifier {
         {
           if(AllergiesValue[j] == "true")
             {
-              TrueAllergies.add(Allergies[j]);
+              TrueAllergies.add(Allergies[j].toLowerCase());
+              FinalTrueAllergies.add(Allergies[j].toLowerCase());
             }
         }
-      print("TRUEEEEEEEEEE");
-      print(AllergiesValue);
-      print(Allergies);
-      print(TrueAllergies);
-      print("lehhh?");
-      print(TrueAllergies.length);
+
+
+
+      var MilkAlternaties =["Whey","Casein","Lactose","Butter","Cream"];
+      var EggAlternaties =["Albumen","Globulin","Livetin","Surimi","Yolk","Egg yolks", "Egg White"];
+
       for (int z=0; z<TrueAllergies.length; z++)
+      {
+
+        if (TrueAllergies.contains("milk") ) {
+          for(int i=0; i<MilkAlternaties.length; i++)
+            {
+              FinalTrueAllergies.add(MilkAlternaties[i].toLowerCase());
+            }
+
+        }
+
+        if(TrueAllergies.contains("eggs"))
         {
-          if (text.contains(TrueAllergies[z])) {
+          for(int i=0; i<EggAlternaties.length; i++)
+          {
+            FinalTrueAllergies.add(EggAlternaties[i].toLowerCase());
+          }
+        }
+
+
+      }
+
+
+
+
+
+      for (int z=0; z<FinalTrueAllergies.length; z++)
+        {
+          var length = FinalTrueAllergies.length;
+          print("FinalTrueAllergies.length+ $length");
+          print("Iteration + $z");
+          print(FinalTrueAllergies[z]);
+          print("text");
+          print(text);
+          if (text.contains(FinalTrueAllergies[z]) ) {
             print('This Product is not safe.');
             return 1;
           }
+          else
+            {
+              print('This Product is safe.');
+            }
           print('baraaa el if.');
         }
 

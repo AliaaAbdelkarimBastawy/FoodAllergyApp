@@ -2,8 +2,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/Restaurant/ShowRestaurant.dart';
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 
 import '../AdminHomePage/AdminHomePage.dart';
+import 'globalsAdminRestaurant.dart' as globals;
+
 
 class EditRestaurant extends StatelessWidget {
   String EditRestaurantName;
@@ -14,15 +17,18 @@ class EditRestaurant extends StatelessWidget {
     required this.itemsLength, }) : super(key: key);
   var RestaurantName = TextEditingController();
   var RestaurantImage = TextEditingController();
-  final fb = FirebaseDatabase.instance.reference().child("Restaurants");
 
+  final DatabaseReference fb =LanguageGlobalByAdmin.isEnglish?
+  FirebaseDatabase.instance.reference().child('Restaurants'):
+  FirebaseDatabase.instance.reference().child('RestaurantsArabic')
+  ;
   Future<dynamic> getWhichRestaurantToUpdate() async {
     final ref = FirebaseDatabase.instance.ref();
     var snapshotUpdate;
-    for (int i =0; i< itemsLength; i++)
+    for (int i =0; i< itemsLength+globals.NoOfDeletedItems+5; i++)
     {
-      print("Before If Condition");
-      snapshotUpdate = await ref.child('Restaurants/Restaurant$i/Name').get();
+      snapshotUpdate =await ref.child('Restaurants/Restaurant$i/Name').get();
+      print(snapshotUpdate.value.toString());
       if(EditRestaurantName== snapshotUpdate.value.toString())
       {
         print("IN EL IF CONDITION");
@@ -34,18 +40,47 @@ class EditRestaurant extends StatelessWidget {
         fb.child("Restaurant$i").set(UpdateRestaurant);
         EditRestaurantName = RestaurantName.text;
         EditRestaurantImage = RestaurantImage.text;
-        print("UPDATE RESTAURANT");
       }
       else
-        {
-          print("Else Part");
+      {
+        print("Else Part");
 
-        }
+      }
 
 
     }
 
   }
+  Future<dynamic> getWhichRestaurantToUpdateArabic() async {
+    final ref = FirebaseDatabase.instance.ref();
+    var snapshotUpdate;
+    for (int i =0; i< itemsLength+globals.NoOfDeletedItems+5; i++)
+    {
+      snapshotUpdate =await ref.child('RestaurantsArabic/Restaurant$i/Name').get();
+      print(snapshotUpdate.value.toString());
+      if(EditRestaurantName== snapshotUpdate.value.toString())
+      {
+        print("IN EL IF CONDITION");
+        Map<String, String> UpdateRestaurant =
+        {
+          'Name' : RestaurantName.text,
+          'image' : RestaurantImage.text,
+        };
+        fb.child("Restaurant$i").set(UpdateRestaurant);
+        EditRestaurantName = RestaurantName.text;
+        EditRestaurantImage = RestaurantImage.text;
+      }
+      else
+      {
+        print("Else Part");
+
+      }
+
+
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +146,17 @@ class EditRestaurant extends StatelessWidget {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: MaterialButton(
                 onPressed: () {
-                  getWhichRestaurantToUpdate();
+                  if(LanguageGlobalByAdmin.isEnglish == true)
+                    {
+                      getWhichRestaurantToUpdate();
+
+                    }
+                  else
+                    {
+                      getWhichRestaurantToUpdateArabic();
+
+                    }
+                  Navigator.pop(context);
                 },
                 child: Text("Update",
                   style: TextStyle(

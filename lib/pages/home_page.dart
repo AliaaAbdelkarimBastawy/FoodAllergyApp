@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduationproject26_1/pages/profile_page.dart';
 import 'package:graduationproject26_1/pages/search_page.dart';
 import 'package:graduationproject26_1/presentation/loginScreen/loginScreen.dart';
@@ -11,7 +12,6 @@ import '../service/auth_service.dart';
 import '../service/database_service.dart';
 import '../widgets/group_tile.dart';
 import '../widgets/widgets.dart';
-import 'auth/login_page.dart';
 
 class HomePage extends StatefulWidget {
   bool profileVisible;
@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
         userName = val!;
       });
     });
+
     // getting the list of snapshots in our stream
     await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
         .getUserGroups()
@@ -85,8 +86,8 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         centerTitle: true,
         backgroundColor: Color(0xFF16CD54),
-        title: const Text(
-          "Groups",
+        title:  Text(
+          "Groups".tr,
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 27),
         ),
@@ -121,8 +122,8 @@ class _HomePageState extends State<HomePage> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             leading: const Icon(Icons.group),
-            title: const Text(
-              "Groups",
+            title:  Text(
+              "Groups".tr,
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -137,8 +138,8 @@ class _HomePageState extends State<HomePage> {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               leading: const Icon(Icons.group),
-              title: const Text(
-                "Profile",
+              title:  Text(
+                "Profile".tr,
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -150,8 +151,8 @@ class _HomePageState extends State<HomePage> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text("Logout"),
-                      content: const Text("Are you sure you want to logout?"),
+                      title:  Text("Logout".tr),
+                      content:  Text("Are you sure you want to logout?".tr),
                       actions: [
                         IconButton(
                           onPressed: () {
@@ -182,8 +183,8 @@ class _HomePageState extends State<HomePage> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             leading: const Icon(Icons.exit_to_app),
-            title: const Text(
-              "Logout",
+            title:  Text(
+              "Logout".tr,
               style: TextStyle(color: Colors.black),
             ),
           )
@@ -215,8 +216,8 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return StatefulBuilder(builder: ((context, setState) {
             return AlertDialog(
-              title: const Text(
-                "Create a group",
+              title:  Text(
+                "Create a group".tr,
                 textAlign: TextAlign.left,
               ),
               content: Column(
@@ -257,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).primaryColor),
-                  child: const Text("CANCEL"),
+                  child:  Text("CANCEL"),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -287,7 +288,6 @@ class _HomePageState extends State<HomePage> {
           }));
         });
   }
-
   groupList() {
     return StreamBuilder(
       stream: groups,
@@ -321,7 +321,6 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
   noGroupWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -342,8 +341,8 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          const Text(
-            "You've not joined any groups, tap on the add icon to create a group or also search from top search button.",
+           Text(
+            "You've not joined any groups, tap on the add icon to create a group or also search from top search button.".tr,
             textAlign: TextAlign.center,
           )
         ],

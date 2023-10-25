@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../helper/helper_function.dart';
 import '../service/database_service.dart';
@@ -56,8 +57,8 @@ class _SearchPageState extends State<SearchPage> {
         title: Container(
           margin: EdgeInsets.only(right: 57),
           child: Center(
-            child: const Text(
-              "Search",
+            child:  Text(
+              "Search".tr,
               style: TextStyle(
                   fontSize: 27, fontWeight: FontWeight.bold, color: Colors.white),
             ),
@@ -85,9 +86,9 @@ class _SearchPageState extends State<SearchPage> {
                     child: TextField(
                       controller: searchController,
                       style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           border: InputBorder.none,
-                          hintText: "Search groups...",
+                          hintText: "Search groups".tr,
                           hintStyle:
                               TextStyle(color: Colors.white, fontSize: 16)),
                     ),
@@ -194,7 +195,7 @@ class _SearchPageState extends State<SearchPage> {
             setState(() {
               isJoined = !isJoined;
             });
-            showSnackbar(context, Colors.green, "Successfully joined he group");
+            showSnackbar(context, Colors.green, "Successfully joined the group".tr);
             Future.delayed(const Duration(seconds: 2), () {
               nextScreen(
                   context,
@@ -206,7 +207,7 @@ class _SearchPageState extends State<SearchPage> {
           } else {
             setState(() {
               isJoined = !isJoined;
-              showSnackbar(context, Colors.red, "Left the group $groupName");
+              showSnackbar(context, Colors.red, "Left the group".tr);
             });
           }
         },
@@ -219,8 +220,8 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: const Text(
-                  "Joined",
+                child:  Text(
+                  "Joined".tr,
                   style: TextStyle(color: Colors.white),
                 ),
               )
@@ -231,7 +232,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: const Text("Join Now",
+                child:  Text("Join Now".tr,
                     style: TextStyle(color: Colors.white)),
               ),
       ),

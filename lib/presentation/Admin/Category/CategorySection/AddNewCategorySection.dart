@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/Category/CategorySection/ShowCategory.dart';
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
+
 
 class AddNewCategorySection extends StatelessWidget {
    AddNewCategorySection({Key? key}) : super(key: key);

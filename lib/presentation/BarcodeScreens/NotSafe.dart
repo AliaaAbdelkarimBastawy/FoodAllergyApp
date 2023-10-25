@@ -1,8 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../AlternativesScreen/AlternativesScreen.dart';
+import 'package:get/get.dart';
 import '../TextRecognition/Main-TextRecognition_2.dart';
 import 'BarcodeScanner.dart';
 
@@ -57,7 +56,7 @@ class NotSafe extends StatelessWidget {
 
 
                   },
-                    child: Text("OK",
+                    child: Text("OK".tr,
 
                       style: TextStyle(
                         fontSize: 18,

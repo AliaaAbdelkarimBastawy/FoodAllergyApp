@@ -3,6 +3,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'AllergenMenuScreen.dart';
+import '../Admin/Restaurant/FromUserOrAdminFile.dart' as globalsFromUser;
+import '../Admin/AdminHomePage/globals.dart' as AdminGlobals;
+
+import '../Admin/Recipe/FromUserOrAdminPage.dart' as globals;
+
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -42,6 +47,7 @@ class _MenuScreen extends State<MenuScreen> {
 
   Future<dynamic> getCurrentUserInfo() async {
     items.clear();
+    items.clear();
     final ref = FirebaseDatabase.instance.ref();
 
     var snapshot;
@@ -56,51 +62,48 @@ class _MenuScreen extends State<MenuScreen> {
 
       snapshot = await ref.child('Restaurants/Restaurant$i/Name').get();
       snapshot2 = await ref.child('Restaurants/Restaurant$i/image').get();
-      //snapshot3 = await ref.child('Restaurants/Restaurant$i/Menu').get();
-      // list.clear();
-      list.clear();
-      for (int j = 1; j < 4; j++) {
-        snapshot3 = await ref.child('Restaurants/Restaurant$i/Menu/dish$j/ListOfcontainedAllergies').get();
-        snapshot4 = await ref.child('Restaurants/Restaurant$i/Menu/dish$j/Name').get();
-        snapshot5 = await ref.child('Restaurants/Restaurant$i/Menu/dish$j/Image').get();
-        list.add(new MenuModel(
-            dishName: snapshot4.value.toString(),
-            dishImage: Image.network(snapshot5.value.toString()),
-            dishDetails: snapshot3.value.toString()));
-        // print(list.length);
-      }
+
+      if(snapshot.value.toString() != "null")
+        {
+          list.clear();
+          for (int j = 1; j < 4; j++) {
+            snapshot3 = await ref.child('Restaurants/Restaurant$i/Menu/dish$j/ListOfcontainedAllergies').get();
+            snapshot4 = await ref.child('Restaurants/Restaurant$i/Menu/dish$j/Name').get();
+            snapshot5 = await ref.child('Restaurants/Restaurant$i/Menu/dish$j/Image').get();
+            if(snapshot4.value.toString() != "null")
+            {
+              list.add(new MenuModel(
+                  dishName: snapshot4.value.toString(),
+                  dishImage: Image.network(snapshot5.value.toString()),
+                  dishDetails: snapshot3.value.toString()));
 
 
-      print(MenuList2.length);
-      print("Menu add ");
-      print(list.length);
-      print(list[0].dishName);
-      print(list[1].dishName);
-      print(list[2].dishName);
-      for(int k =0; k<2; k++){
+              MenuList3[Names.length].add(new MenuModel(
+                  dishName: snapshot4.value.toString(),
+                  dishImage: Image.network(snapshot5.value.toString()),
+                  dishDetails: snapshot3.value.toString()));
+            }
 
-        // MenuList2[i].add(list[k]); //<--changed to add
-        print(list[k].dishName);
-      }
+            // print(list.length);
+          }
 
-      MenuList3[i-1].add(list[0]);
-      MenuList3[i-1].add(list[1]);
-      MenuList3[i-1].add(list[2]);
-      print("MENU LIST 3333" );
-      print(MenuList3.length);
-      print(MenuList3[i].length);
 
-      MenuList2.add(list);
+          print("MENU LIST 3333" );
+          print(MenuList3.length);
+          print(MenuList3[i].length);
 
-      print(list);
-      Names.add(snapshot.value.toString());
-      Images.add(snapshot2.value.toString());
+          MenuList2.add(list);
+
+          print(list);
+          Names.add(snapshot.value.toString());
+          Images.add(snapshot2.value.toString());
+        }
+
     }
 
     for (int i = 0; i < Names.length; i++) {
 
 
-      setState(() {
         items.add(Model(
           title: Names[i],
           image: Image.network(
@@ -111,7 +114,6 @@ class _MenuScreen extends State<MenuScreen> {
           MenuList:MenuList3[i],
         ));
         print("items" + items[0].title);
-      });
     }
 
     print(Names);
@@ -191,7 +193,7 @@ class _MenuScreen extends State<MenuScreen> {
                         items[index].title,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 25,
+                            fontSize: 18,
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
                             fontFamily: "Outfit"),
@@ -209,6 +211,7 @@ class _MenuScreen extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
+    globalsFromUser.FromUser=2;
     getCurrentUserInfo();
   }
 

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 
 import '../../Alcohol-TextRecognition/Main-TextRecognition.dart';
@@ -86,7 +87,7 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 15, bottom: 20),
-              child: Text("Check on it!",
+              child: Text("Check on it!".tr,
                   textAlign: TextAlign.center,
                   style:
                   TextStyle(
@@ -103,7 +104,7 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
                     size: 37,
                   ),
                   SizedBox(width: 10,),
-                  Text("What do you want to detect?",
+                  Text("What do you want to detect?".tr,
                       textAlign: TextAlign.left,
                       style:
                       TextStyle(
@@ -144,7 +145,6 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
         child: GridView.builder(
 
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-
             crossAxisCount: 2,
             mainAxisSpacing: 3,
             crossAxisSpacing: 2,
@@ -154,12 +154,11 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
           return GestureDetector(
 
             child: Card(
-
               borderOnForeground: false,
               surfaceTintColor: Colors.transparent,
               color: Colors.transparent,
               shadowColor: Colors.transparent,
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
 
               child: GridTile(
 
@@ -167,14 +166,11 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
                   alignment: WrapAlignment.center,
                   crossAxisAlignment: WrapCrossAlignment.center,
 
-
-
                   children: [
-
                     items[index].image,
-
+                    SizedBox(height: 5,),
                     Text(
-                      items[index].title,
+                      items[index].title.tr,
 
                       textAlign: TextAlign.center,
 

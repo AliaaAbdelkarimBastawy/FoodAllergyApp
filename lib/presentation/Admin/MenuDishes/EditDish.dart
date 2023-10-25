@@ -3,100 +3,54 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/MenuDishes/ShowDishes.dart';
 
+import '../Restaurant/RestaurantDetailsForAdminPanel.dart';
 import '../Restaurant/ShowRestaurant.dart';
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 
 
 
-class EditDish extends StatelessWidget {
-  String EditDishName;
-  String EditDishImage;
-  String EditDishAllergyContained;
-  String EditRestaurantName;
-  int itemsLength;
-  int MenuListLength;
-  AdminRestaurantModel detailsModel;
-  List<String> ImagesOfDishes = [];
+class EditDish extends StatefulWidget {
 
-  EditDish({Key? key, required this.EditRestaurantName, required this.EditDishName,required this.MenuListLength
-    ,required this.itemsLength,
-    required this.EditDishImage, required this.EditDishAllergyContained, required this.detailsModel, required this.ImagesOfDishes}) : super(key: key);
+  final String restaurantName;
+  final String initialName;
+  final String initialImage;
+  final String initialContainedAllergies;
+  final int LengthOfRestaurants;
+  final int LengthOfDishes;
+
+   EditDish({
+  required this.restaurantName,
+  required this.initialName,
+  required this.initialImage,
+  required this.initialContainedAllergies,
+     required this.LengthOfDishes,
+     required this.LengthOfRestaurants
+  });
+
+  @override
+  State<EditDish> createState() => _EditDishState();
+}
+
+class _EditDishState extends State<EditDish> {
   var RestaurantName = TextEditingController();
+
   var DishName = TextEditingController();
+
   var DishImage = TextEditingController();
+
   var DishAllergyContained = TextEditingController();
 
-  final fb = FirebaseDatabase.instance.reference().child("Restaurants");
-
-  Future<dynamic> getWhichDishToUpdate() async {
-    final ref = FirebaseDatabase.instance.ref();
-    var snapshotUpdate;
-    int dishCount;
-    var SnapshotGetCounter;
-    var snapshotDishUpdate;
-
-    for (int i =0; i< itemsLength; i++)
-    {
-      print("Gowa awel For loop");
-      print("Before If Condition");
-      snapshotUpdate = await ref.child('Restaurants/Restaurant$i/Name').get();
-      if(EditRestaurantName== snapshotUpdate.value.toString())
-      {
-        print("WESLT LEL RESTAURANT");
-        SnapshotGetCounter = await ref.child('Restaurants/Restaurant$i/DishCounter/Counter').get();
-        dishCount = int.parse(SnapshotGetCounter.value.toString());
-        print("DISH COUNT =");
-        print(dishCount);
-        for(int j =0; j<dishCount+1; j++ )
-          {
-            print("Gowa Tany For loop");
-            snapshotDishUpdate = await ref.child('Restaurants/Restaurant$i/Menu/dish$j/Name').get();
-            if(EditDishName == snapshotDishUpdate.value.toString())
-              {
-                for(int z=0; z< detailsModel.MenuList.length; z++)
-                  {
-                    if(detailsModel.MenuList[z].dishName == EditDishName)
-                      {
-                        detailsModel.MenuList[z].dishName = DishName.text;
-                        detailsModel.MenuList[z].dishImage = Image.network(DishImage.text);
-                        detailsModel.MenuList[z].dishDetails = DishAllergyContained.text;
-
-                      }
-
-                  }
-                print("WESLT LEL Dish");
-                print("Dish Rakam = ");
-                print(j);
-
-                Map<String, String> UpdateDish =
-                {
-                  'Name' : DishName.text,
-                  'Image' : DishImage.text,
-                  'ListOfcontainedAllergies' : DishAllergyContained.text
-                };
-                fb.child("Restaurant$i/Menu/dish$j").set(UpdateDish);
-                EditDishName = DishName.text;
-                EditDishImage =  DishImage.text;
-                EditDishAllergyContained = DishAllergyContained.text;
-                print("Firebase is updated");
-                break;
-              }
-
-          }
-
-        break;
-      }
-      else
-      {
-        print("Else Part");
-
-      }
+  late DatabaseReference _dishesRef;
 
 
-    }
-
+  @override
+  void initState() {
+    super.initState();
+    DishName.text = widget.initialName;
+    DishImage.text = widget.initialImage;
+    DishAllergyContained.text = widget.initialContainedAllergies;
+    _dishesRef = FirebaseDatabase.instance.reference().child('Restaurants');
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +65,11 @@ class EditDish extends StatelessWidget {
             Icons.arrow_back_rounded,
             color: Colors.white,
           ), onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> ShowDishes(
-              detailsModel: detailsModel, itemsLength: itemsLength, ImagesOfDishes: ImagesOfDishes)));
+          // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+              // RestaurantDetailsForAdminPanel(detailsModel:
+              // detailsModel,
+              //   RestaurantName: EditRestaurantName,
+              //   RestaurantImage: EditRestaurantImage, RestaurantLength: itemsLength,)));
         },
         ),      ),
       body: Padding(
@@ -124,7 +81,7 @@ class EditDish extends StatelessWidget {
             Text("Dish Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
             SizedBox(height: 10,),
             TextFormField(
-              controller: DishName ..text = EditDishName,
+              controller: DishName ..text = widget.initialName,
               decoration: InputDecoration(
                 contentPadding:
                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -138,10 +95,11 @@ class EditDish extends StatelessWidget {
               // minLines: 3,
             ),
             SizedBox(height: 15,),
+
             Text("Allergy Contained", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
             SizedBox(height: 10,),
             TextFormField(
-              controller: DishAllergyContained ..text = EditDishAllergyContained,
+              controller: DishAllergyContained ..text = widget.initialContainedAllergies,
               decoration: InputDecoration(
                 contentPadding:
                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -156,7 +114,7 @@ class EditDish extends StatelessWidget {
             Text("Dish Image", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
             SizedBox(height: 10,),
             TextFormField(
-              controller: DishImage ..text =EditDishImage,
+              controller: DishImage ..text =widget.initialImage,
               decoration: InputDecoration(
                 contentPadding:
                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -168,6 +126,7 @@ class EditDish extends StatelessWidget {
               keyboardType: TextInputType.multiline,
               maxLines: null,),
             SizedBox(height: 30,),
+
             Container(
               height: 44,
               width: double.infinity,
@@ -176,7 +135,7 @@ class EditDish extends StatelessWidget {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: MaterialButton(
                 onPressed: () {
-                   getWhichDishToUpdate();
+                  _saveChanges;
                 },
                 child: Text("Update",
                   style: TextStyle(
@@ -190,6 +149,60 @@ class EditDish extends StatelessWidget {
     );
   }
 
+  void _saveChanges() async {
+    print("Here ana henaa");
+    final ref = FirebaseDatabase.instance.ref();
+    var snapshotUpdate;
+    int dishCount;
+    var SnapshotGetCounter;
+    var snapshotDishUpdate;
 
+    for (int i = 0; i < widget.LengthOfRestaurants; i++) {
+      print("Gowa awel For loop");
+      print("Before If Condition");
+      snapshotUpdate = await ref.child('Restaurants/Restaurant$i/Name').get();
+      if (widget.restaurantName == snapshotUpdate.value.toString()) {
+        print("WESLT LEL RESTAURANT");
+        SnapshotGetCounter =
+        await ref.child('Restaurants/Restaurant$i/DishCounter/Counter').get();
+        dishCount = int.parse(SnapshotGetCounter.value.toString());
+        print("DISH COUNT =");
+        print(dishCount);
+        for (int j = 0; j < widget.LengthOfDishes; j++) {
+          snapshotDishUpdate =
+          await ref.child('Restaurants/Restaurant$i/Menu/dish$j/Name').get();
+          if (widget.initialName == snapshotDishUpdate.value.toString()) {
+            String name = DishName.text;
+            String description = DishImage.text;
+            String price = DishAllergyContained.text;
+            _dishesRef
+                .orderByChild('Name')
+                .equalTo(widget.restaurantName)
+                .once()
+                .then((DatabaseEvent event) {
+              Map<dynamic, dynamic> restaurantMap = event.snapshot.value as Map<
+                  dynamic,
+                  dynamic>;
+              String restaurantKey = restaurantMap.keys.first;
+              _dishesRef
+                  .child(restaurantKey)
+                  .child('Menu')
+                  .child('dish$j')
+                  .update({
+                'Name': name,
+                'Image': description,
+                'ListOfcontainedAllergies': price,
+              }).then((_) {
+                Navigator.pop(context);
+              });
+            });
+
+            break;
+          }
+        }
+      }
+    }
+  }
 
 }
+

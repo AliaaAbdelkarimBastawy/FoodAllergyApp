@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduationproject26_1/presentation/Admin/AdminHomePage/AdminHomePage.dart';
 import '../../helper/helper_function.dart';
 import '../../pages/home_page.dart';
@@ -44,6 +46,7 @@ class _loginScreenState extends State<loginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
@@ -69,11 +72,13 @@ class _loginScreenState extends State<loginScreen> {
                     SizedBox(
                       height: 30,
                     ),
-                    Text("Login Account",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,),),
+
+                   Text("Login Account".tr,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,),),
+
                     SizedBox(
                       height: 20,
                     ),
@@ -83,7 +88,7 @@ class _loginScreenState extends State<loginScreen> {
                         controller: EmailController,
                         validator: (String? value) {
                           if (value != null && value.isEmpty) {
-                            return "Email can't be empty";
+                            return "Email can't be empty".tr;
                           }
                           return null;
                         },
@@ -91,8 +96,8 @@ class _loginScreenState extends State<loginScreen> {
 
                           contentPadding:
                           EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                          labelText: "Email",
-                          hintText: "Enter your email",
+                          labelText: "Email".tr,
+                          hintText: "Enter your email".tr,
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.email),
                           enabledBorder: OutlineInputBorder(
@@ -114,7 +119,7 @@ class _loginScreenState extends State<loginScreen> {
                         controller: PasswordController,
                         validator: (String? value) {
                           if (value != null && value.isEmpty) {
-                            return "Password can't be empty";
+                            return "Password can't be empty".tr;
                           }
                           return null;
                         },
@@ -122,8 +127,8 @@ class _loginScreenState extends State<loginScreen> {
                         decoration: InputDecoration(
                           contentPadding:
                           EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                          labelText: "Password",
-                          hintText: "Enter your password",
+                          labelText: "Password".tr,
+                          hintText: "Enter your password".tr,
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.lock),
                           suffixIcon: IconButton(icon: isPassword? Icon(Icons.visibility): Icon(Icons.visibility_off),
@@ -152,7 +157,7 @@ class _loginScreenState extends State<loginScreen> {
                             child: TextButton(onPressed:(){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> forgetPasswordScreen()));
                             }, child:
-                            Text("Forget Password?",
+                            Text("Forget Password?".tr,
                             style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),),
                               style: TextButton.styleFrom(
                                 primary: Colors.black,
@@ -177,7 +182,7 @@ class _loginScreenState extends State<loginScreen> {
                             SignIn();
                           }
                         },
-                        child: Text("Login",
+                        child: Text("Login".tr,
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
@@ -190,12 +195,12 @@ class _loginScreenState extends State<loginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Not registered yet?"),
+                        Text("Not registered yet?".tr),
                         SizedBox(width: 0.2,),
                         TextButton(onPressed:
                             (){
                           Navigator.push(context, MaterialPageRoute(builder: (context)=> SignUpScreen()));
-                        }, child: Text("Sign up", style:
+                        }, child: Text("Sign up".tr, style:
                         TextStyle(
                           fontWeight: FontWeight.bold
                         ),),
@@ -214,32 +219,22 @@ class _loginScreenState extends State<loginScreen> {
         ),
     );
   }
-  // Future SignIn() async{
-  //   await FirebaseAuth.instance.signInWithEmailAndPassword(
-  //       email: EmailController.text.trim(),
-  //       password: PasswordController.text.trim(),
-  //   );
-  //   if (EmailController.text.toString() == "Admin1@yahoo.com" && PasswordController.text.toString() == "12345678")
-  //     {
-  //       print("ADMIN");
-  //       Navigator.push(context, MaterialPageRoute(builder: (context)=> AdminHomePage()));
-  //
-  //     }
-  //
-  //   else
-  //     {
-  //       print("USER");
-  //       Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0,
-  //         drawer: true,)));
-  //
-  //     }
-  //
-  //
-  // }
-
 
 
   SignIn() async {
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    late DatabaseReference reference;
+    FirebaseDatabase db = FirebaseDatabase.instance;
+
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+    print(uid);
+    reference = db.ref();
+
+    var UsernameSnapshot  = await reference.child('$uid/UserData/Name').get();
+    print(UsernameSnapshot.value.toString());
+
     if (FormKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -248,26 +243,33 @@ class _loginScreenState extends State<loginScreen> {
           .loginWithUserNameandPassword(EmailController.text, PasswordController.text)
           .then((value) async {
         if (value == true) {
-          QuerySnapshot snapshot =
-          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-              .gettingUserData(EmailController.text);
-          // saving the values to our shared preferences
-          await HelperFunctions.saveUserLoggedInStatus(true);
-          await HelperFunctions.saveUserEmailSF(EmailController.text);
-          await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
-          
-          if(EmailController.text == "aly@yahoo.com" && PasswordController.text == "12345678")
+          if(EmailController.text == "Aliaa2005@yahoo.com" && PasswordController.text == "12345678" || EmailController.text == "Maram350@yahoo.com" && PasswordController.text == "12345678")
             {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                return HomePage(profileVisible: false, CreateGroupButton: true,);
+                return AdminHomePage();
               }));
-
 
               // nextScreenReplace(context,  HomePage(profileVisible: false, CreateGroupButton: true,));
             }
+
+          else if(EmailController.text == "Ali3535@yahoo.com" && PasswordController.text == "12345678")
+          {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+              return HomePage(profileVisible: false, CreateGroupButton: true);
+            }));
+
+          }
+
+          else if(EmailController.text == "Haidy700@yahoo.com" && PasswordController.text == "12345678" || EmailController.text == "Tasneem350@yahoo.com" && PasswordController.text == "12345678")
+            {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                return HomePage(profileVisible: false, CreateGroupButton: true);
+              }));
+
+            }
+
           else
             {
-
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
                 return MainScreen(Current: 0, drawer: true);
               }));
@@ -282,5 +284,5 @@ class _loginScreenState extends State<loginScreen> {
       });
     }
   }
-  
+
 }

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -27,21 +28,12 @@ class HomeView extends StatelessWidget {
                   height: 20,
                 ),
                 RichText(
-                  text: const TextSpan(
-                    text: "Detect",
+                  text:  TextSpan(
+                    text: "Detect Allergy!".tr,
                     style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 30.0,
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
-                    children: [
-                      TextSpan(
-                        text: ' Allergy!',
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
                   ),
                 ),
                 const SizedBox(
@@ -68,7 +60,7 @@ class HomeView extends StatelessWidget {
                             .pickUserImage(
                             context: context, source: ImageSource.gallery);
                       },
-                        child: Text("Gallery",
+                        child: Text("Gallery".tr,
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.white,),),
@@ -84,7 +76,7 @@ class HomeView extends StatelessWidget {
                             .pickUserImage(
                             context: context, source: ImageSource.camera);
                       },
-                        child: Text("Camera",
+                        child: Text("Camera".tr,
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.white,),),
@@ -157,7 +149,7 @@ class HomeView extends StatelessWidget {
                                   builder: (context) => Safe()));
                             }
                           },
-                            child: Text("Scan",
+                            child: Text("Scan".tr,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,),),

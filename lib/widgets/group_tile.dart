@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduationproject26_1/widgets/widgets.dart';
 
 import '../pages/chat_page.dart';
@@ -54,7 +55,7 @@ class _GroupTileState extends State<GroupTile> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            "Join the conversation",
+            "Join the conversation".tr,
             style: const TextStyle(fontSize: 13),
           ),
         ),

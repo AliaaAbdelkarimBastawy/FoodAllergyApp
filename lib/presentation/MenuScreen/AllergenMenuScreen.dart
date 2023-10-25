@@ -1,8 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graduationproject26_1/presentation/Admin/Restaurant/ShowRestaurant.dart';
+import '../Admin/Restaurant/FromUserOrAdminFile.dart' as globals;
+import '../Admin/AdminHomePage/globals.dart' as AdminGlobals;
 
 import '../mainScreen/MainScreen.dart';
+import '../mainScreen/MainScreen2.dart';
 import 'MenuScreen.dart';
 
 
@@ -26,10 +30,6 @@ class AllergenMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("details model---");
-
-    print(detailsModel.MenuList[0].dishName);
-    print(detailsModel.MenuList[1].dishName);
-    print(detailsModel.MenuList[2].dishName);
 
     return
       Scaffold(
@@ -83,8 +83,28 @@ class AllergenMenuScreen extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                  MainScreen(Current: 0, drawer: 1,)));
+              if(globals.FromUser == 0) {
+                print("globals.FromUser == 0");
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    ShowRestaurant()));
+              }
+
+              else if(globals.FromUser ==2)
+              {
+                print("globals.FromUser ==2");
+                if(AdminGlobals.WhichMainScreen2 ==1)
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      MainScreen2(Current: 1)));
+                }
+                else
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      MainScreen(Current: 1, drawer: true,)));
+                }
+
+              }
+
             },
           ),
           elevation: 0,
@@ -126,21 +146,3 @@ class AllergenMenuScreen extends StatelessWidget {
             );
           });
 }
-// Future<void> search(String text) async {
-//
-//   items.clear();
-//   for (int i = 0; i < Names.length; i++) {
-//     setState(() {
-//       if (Names[i].contains(text)) {
-//         items.add(new Model(
-//             title: Names[i],
-//             image: Image.network(
-//               Images[i],
-//               width: 150,
-//               height: 150,
-//             )));
-//       }
-//     });
-//   }
-// }
-

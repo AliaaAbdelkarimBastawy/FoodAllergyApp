@@ -1,25 +1,49 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
+import 'package:graduationproject26_1/LocalString.dart';
+import 'package:graduationproject26_1/languageGlobal.dart' as LanguageGlobal;
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../data/startScreens/pageViewModel.dart';
 import '../loginScreen/loginScreen.dart';
 
-class StartScreen extends StatelessWidget {
+class StartScreen extends StatefulWidget {
+
+  bool lang;
+  StartScreen({Key? key, required this.lang}) : super(key: key);
+
+  @override
+  State<StartScreen> createState() => _StartScreenState();
+}
+
+Future<void> _LanguageScreenSharedPreference() async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('languageScreen', true);
+}
+
+class _StartScreenState extends State<StartScreen> {
    PageController pageController = PageController(viewportFraction: 0.8, keepPage: true);
 
-  StartScreen({Key? key}) : super(key: key);
+   @override
+   void initState()
+   {
+     _LanguageScreenSharedPreference();
+     super.initState();
+   }
 
   List<PageViewModel> startScreensList = [
     PageViewModel(imageProvider: AssetImage('Assets/Images/start_screen1.jpg'),
-        title: "Search Food Products",
-        description:"Search food by Product name to know what allergy types it contains"),
+        title: "Search Food Products".tr,
+        description:"Search food by Product name to know what allergy types it contains".tr),
     PageViewModel(imageProvider: AssetImage('Assets/Images/start_screen2.jpg'),
-        title: "Search Recipes & Menus",
-        description:"Search different recipes that are safe to your allergy type, and you can also see the allergens Menus of the most popular restaurants"),
+        title: "Search Recipes & Menus".tr,
+        description:"Search different recipes that are safe to your allergy type, and you can also see the allergens Menus of the most popular restaurants".tr),
     PageViewModel(imageProvider: AssetImage('Assets/Images/start_screen3.jpg'),
-        title: "Scan, Check & Enjoy!",
-        description:"Scan products you want to check if they are Allergy free or Alcohol free & enjoy happy, friendly Shopping!"),
+        title: "Scan, Check & Enjoy!".tr,
+        description:"Scan products you want to check if they are Allergy free or Alcohol free & enjoy happy, friendly Shopping!".tr),
   ];
 
   @override
@@ -37,7 +61,7 @@ class StartScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 14.0),
             child: Container(
                 margin: EdgeInsets.only(left: 270),
-                child: Text("Skip", style: TextStyle(
+                child: Text("Skip".tr, style: TextStyle(
                   fontSize: 15,
                     color: Color(0xFF16CD54)),)),
           ),),

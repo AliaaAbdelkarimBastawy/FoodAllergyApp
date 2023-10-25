@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import 'AlcoholDetected.dart';
 
@@ -42,7 +43,7 @@ class ScanAlcohol extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> AlcoholDetected()));
 
                   },
-                    child: Text("Detect Alcohol",
+                    child: Text("Detect Alcohol".tr,
                       style: TextStyle(
                         fontSize: 22,
                         color: Color(0xFF1FCA4F),

@@ -1,4 +1,3 @@
-
 import 'home.view_2.dart';
 
 class AppRoutes {

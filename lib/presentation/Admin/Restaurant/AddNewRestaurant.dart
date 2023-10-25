@@ -6,6 +6,7 @@ import 'package:graduationproject26_1/presentation/Admin/Restaurant/ShowRestaura
 import 'package:graduationproject26_1/presentation/HomeScreen/globals.dart';
 import 'globalsAdminRestaurant.dart' as globals;
 import 'package:graduationproject26_1/presentation/Admin/DishesCounterGlobal.dart' as globalsDishesCounter;
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 
 
 class AddNewRestaurant extends StatefulWidget {
@@ -16,8 +17,10 @@ class AddNewRestaurant extends StatefulWidget {
 }
 
 class _AddNewRestaurantState extends State<AddNewRestaurant> {
-  final fb = FirebaseDatabase.instance.reference().child("Restaurants");
-
+  final DatabaseReference fb =LanguageGlobalByAdmin.isEnglish?
+  FirebaseDatabase.instance.reference().child('Restaurants'):
+  FirebaseDatabase.instance.reference().child('RestaurantsArabic')
+  ;
   var RestaurantName = TextEditingController();
   var RestaurantImage = TextEditingController();
 
@@ -72,6 +75,55 @@ class _AddNewRestaurantState extends State<AddNewRestaurant> {
 
   }
 
+  Future<dynamic> AddRestaurantArabic() async {
+    final ref = FirebaseDatabase.instance.ref();
+    var snapshot;
+    int ResCount;
+    int RestaurantCount;
+    snapshot = await ref.child('RestaurantsArabic/RestaurantCounter/Counter').get();
+    globalsDishesCounter.RestaurantCounter = int.parse(snapshot.value.toString());
+    ResCount =  globalsDishesCounter.RestaurantCounter;
+
+
+
+    Map<String, String> restaurants =
+    {
+      'Name' : RestaurantName.text,
+      'image' : RestaurantImage.text,
+    };
+
+    Map<String, String> DishesCounter =
+    {
+      'Counter' : "1",
+    };
+
+
+    fb.child("Restaurant$ResCount").set(restaurants);
+    globals.NumberOfReload ++;
+    globals.ID ++;
+    setState(() {
+      globals.loop++;
+    });
+
+    fb.child("Restaurant$ResCount/DishCounter").set(DishesCounter);
+
+    if(!globalsDishesCounter.RestaurantsList.contains(RestaurantName.text))
+    {
+      globalsDishesCounter.RestaurantsList.add(RestaurantName.text);
+      globalsDishesCounter.DishesCounterList.add(0);
+    }
+    // });
+
+    ResCount++;
+    Map<String, String> count =
+    {
+      'Counter' : ResCount.toString(),
+    };
+
+    fb.child("RestaurantCounter").set(count);
+    globalsDishesCounter.RestaurantCounter ++;
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +183,18 @@ class _AddNewRestaurantState extends State<AddNewRestaurant> {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: MaterialButton(
                 onPressed: () {
-                  AddRestaurant();
+                  if (LanguageGlobalByAdmin.isEnglish == true)
+                    {
+                      AddRestaurant();
+
+                    }
+                  else
+                    {
+                      AddRestaurantArabic();
+
+                    }
+                  Navigator.pop(context);
+
                 },
                 child: Text("Add",
                   style: TextStyle(

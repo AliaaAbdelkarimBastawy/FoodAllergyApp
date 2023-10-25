@@ -1,7 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduationproject26_1/pages/home_page.dart';
+import 'package:graduationproject26_1/presentation/test/CategoriesTest.dart';
+import 'package:graduationproject26_1/presentation/test/KnowledgeTest.dart';
+import 'package:graduationproject26_1/presentation/test/MyHomeTest.dart';
+import 'package:graduationproject26_1/presentation/test/RestaurantTest.dart';
+import 'package:graduationproject26_1/presentation/test/test.dart';
 import '../../helper/helper_function.dart';
 import '../../service/auth_service.dart';
 import '../../service/database_service.dart';
@@ -9,13 +15,13 @@ import '../Admin/AdminHomePage/AdminHomePage.dart';
 import '../BarcodeScreens/BarcodeScanner.dart';
 import '../CategoriesScreen/CategoriesScreen.dart';
 import '../HomeScreen/HomeScreen.dart';
-import '../KnowledgeScreens/KnowledgeScreen.dart';
 import '../MenuScreen/MenuScreen.dart';
 import '../RecipesScreen/RecipesScreen.dart';
 import '../TextRecognition/Main-TextRecognition_2.dart';
 import '../loginScreen/loginScreen.dart';
 import '../profileScreen/profileScreen.dart';
 import 'globals.dart' as globals;
+import '../Admin/AdminHomePage/globals.dart' as AdminGlobals;
 import '../../data/homeScreen/homeScreenViewModel.dart';
 
 class MainScreen extends StatefulWidget {
@@ -43,11 +49,6 @@ class _MainScreenState extends State<MainScreen> {
   String email = "";
   AuthService authService = AuthService();
 
-  String getName = "";
-
-  String getEmail = "";
-
-  String getPassword = "";
   @override
   // TODO: implement widget
   final fb = FirebaseDatabase.instance.reference().child("Restaurants");
@@ -57,32 +58,14 @@ class _MainScreenState extends State<MainScreen> {
   static  List<Model2> items = [];
 
 
-  List<Widget> screens = [HomeScreen(),MenuScreen(),
-    RecipesScreen(),
-    CategoriesScreen()];
+  List<Widget> screens = [MyHome(),MyRestaurants(),
+    MyRecipes(),
+    MyCategory()];
 
 
   List<String> ScreensTitles = ["Home","Menus",
     "Recipes", "Categories"];
 
-  List<HomeViewModel> HomeScreensList = [
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-    HomeViewModel(imageProvider: AssetImage('Assets/Images/tortilla.jpg'),
-      title: "Chicken Tortella",),
-  ];
 
   int Current_Index = 0;
   static const TextStyle optionStyle =
@@ -92,6 +75,13 @@ class _MainScreenState extends State<MainScreen> {
           Current_Index = index;
     });
   }
+
+
+  String getName = "";
+
+  String getEmail = "";
+
+  String getPassword = "";
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   late DatabaseReference reference;
@@ -112,6 +102,15 @@ class _MainScreenState extends State<MainScreen> {
 
     setState(() {
       getName = snapshotName.value.toString();
+      globals.username = getName;
+
+      if(globals.username == "null")
+        {
+          gettingUserData();
+          print("NameIfNull");
+          print(getName);
+        }
+
       getEmail = snapshotEmail.value.toString();
       getPassword = snapshotPassword.value.toString();
     });
@@ -124,13 +123,14 @@ class _MainScreenState extends State<MainScreen> {
     print("gettingUserData");
     await HelperFunctions.getUserNameFromSF().then((val) {
       setState(() {
-        userName = val!;
+        getName = val!;
+        globals.username = getName;
+        print("Line 139");
+        print(getName);
       });
     });
     // getting the list of snapshots in our stream
   }
-
-
 
 
 
@@ -150,7 +150,7 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Color(0xFF16CD54),
           title: Padding(
             padding: const EdgeInsets.only(left: 94.0),
-            child: Text(ScreensTitles[Current_Index]),
+            child: Text(ScreensTitles[Current_Index].tr),
           ),
       actions: <Widget>[
         Visibility(
@@ -160,7 +160,8 @@ class _MainScreenState extends State<MainScreen> {
               color: Colors.white,
             ),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(profileVisible: true, CreateGroupButton: false,)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                  HomePage(profileVisible: true, CreateGroupButton: false,)));
             },
           ),
         ),
@@ -175,7 +176,6 @@ class _MainScreenState extends State<MainScreen> {
             },
           ),
         ),
-
       ]
       ),
       body: screens[Current_Index],
@@ -205,7 +205,7 @@ class _MainScreenState extends State<MainScreen> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10,),
-                      Text(userName,
+                      Text(globals.username,
                         style: TextStyle(fontSize:18,fontWeight: FontWeight.bold, color: Colors.white),),
                     ],
                   ),
@@ -219,7 +219,7 @@ class _MainScreenState extends State<MainScreen> {
                     color: Colors.black,
                   ),
                   SizedBox(width: 10,),
-                  Text('Profile'),
+                  Text('Profile'.tr),
                 ],
               ),
               onTap: () {
@@ -233,18 +233,18 @@ class _MainScreenState extends State<MainScreen> {
                     color: Colors.black,
                   ),
                   SizedBox(width: 10,),
-                  Text('Knowledge'),
+                  Text('Knowledge'.tr),
                 ],
               ),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> KnowledgeScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> MyKnowledge()));
               },
             ),
             Container(
               margin: EdgeInsets.all(20),
               child: MaterialButton(onPressed: _showAlertDialog,
                 color: Color(0xFF16CD54),
-                child: Text("Logout",
+                child: Text("Logout".tr,
                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
               ),
             ),
@@ -253,22 +253,22 @@ class _MainScreenState extends State<MainScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.black,
-        items: const <BottomNavigationBarItem>[
+        items:  <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: "Home".tr,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),
-            label: 'Menus',
+            label: 'Menus'.tr,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.food_bank),
-            label: 'Recipes',
+            label: 'Recipes'.tr,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_shopping_cart),
-            label: 'Categories',
+            label: 'Categories'.tr,
           ),
         ],
         currentIndex: Current_Index,
@@ -289,17 +289,17 @@ class _MainScreenState extends State<MainScreen> {
             actionsAlignment: MainAxisAlignment.center,
             actionsPadding: EdgeInsets.only(bottom: 10),
             // <-- SEE HERE
-            title: Center(child: const Text('Logout?')),
+            title: Center(child:  Text('Logout?'.tr)),
             content: SingleChildScrollView(
               child: ListBody(
-                children: const <Widget>[
-                  Center(child: Text('Are you sure want to logout?')),
+                children:  <Widget>[
+                  Center(child: Text('Are you sure want to logout?'.tr)),
                 ],
               ),
             ),
             actions: <Widget>[
               OutlinedButton(
-                child: const Text('Cancel', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 14),),
+                child:  Text('Cancel'.tr, style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 14),),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -310,7 +310,7 @@ class _MainScreenState extends State<MainScreen> {
                   color: Colors.white,
                 ),
                 child: OutlinedButton(
-                  child: const Text('Logout', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 14),),
+                  child:  Text('Logout'.tr, style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 14),),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> loginScreen()));
                   },
@@ -325,8 +325,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    getUserData();
+    AdminGlobals.WhichMainScreen2 =0;
     super.initState();
+    getUserData();
     gettingUserData();
   }
 

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import 'Safe.dart';
 
@@ -44,7 +45,7 @@ class ScanAllergy extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> Safe()));
 
                   },
-                    child: Text("Scan the Allergy",
+                    child: Text("Scan the Allergy".tr,
                       style: TextStyle(
                         fontSize: 22,
                         color: Color(0xFF1FCA4F),

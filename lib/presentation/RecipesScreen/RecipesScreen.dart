@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-
 import '../../data/CategoriesScreen/CategoriesScreenViewModel.dart';
 import '../recipesDetails/recipes_Details.dart';
 
+import '../Admin/Recipe/FromUserOrAdminPage.dart' as globals;
 class RecipesScreen extends StatefulWidget {
   const RecipesScreen({Key? key}) : super(key: key);
 
@@ -29,8 +29,13 @@ class recipeModel {
         required this.ingredients});
 }
 
+
 class _RecipesScreenState extends State<RecipesScreen> {
   final fb = FirebaseDatabase.instance.reference().child("Recipes");
+
+
+
+
 
   List<recipeModel> list = [];
   static List<String> Names = [];
@@ -63,15 +68,18 @@ class _RecipesScreenState extends State<RecipesScreen> {
       snapshot5 = await ref.child('Recipes/Recipe$i/Duration').get();
       snapshot6 = await ref.child('Recipes/Recipe$i/Directions').get();
 
-      Names.add(snapshot.value.toString());
-      Images.add(snapshot2.value.toString());
-      containedAllergies.add(snapshot3.value.toString());
-      ingredientss.add(snapshot4.value.toString());
-      durations.add(snapshot5.value.toString());
-      directionss.add(snapshot6.value.toString());
+      if(snapshot.value.toString() != "null")
+        {
+          Names.add(snapshot.value.toString());
+          Images.add(snapshot2.value.toString());
+          containedAllergies.add(snapshot3.value.toString());
+          ingredientss.add(snapshot4.value.toString());
+          durations.add(snapshot5.value.toString());
+          directionss.add(snapshot6.value.toString());
+        }
+
     }
     for (int i = 0; i < Names.length; i++) {
-      setState(() {
         items.add(new recipeModel(
           Name: Names[i],
           image: Image.network(
@@ -81,7 +89,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
           ), containedAllery: containedAllergies[i], direction: directionss[i]
           ,duration: durations[i] ,ingredients: ingredientss[i],));
         print("items" + items[0].Name);
-      });
     }
     print(Names);
     print(Images);
@@ -145,7 +152,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
     );
   }
 
-
   Widget buildStartScreensItem(recipeModel model) => Padding(
     padding: const EdgeInsets.fromLTRB(8,8,4,8),
     child: Material(
@@ -195,10 +201,10 @@ class _RecipesScreenState extends State<RecipesScreen> {
 
   @override
   void initState() {
+    globals.FromUser=2;
     super.initState();
     getCurrentUserInfo();
   }
-
   Future<void> search(String text) async {
     items.clear();
     for (int i = 0; i < Names.length; i++) {

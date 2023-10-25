@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:graduationproject26_1/LocalString.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:graduationproject26_1/languageGlobal.dart' as LanguageGlobal;
 
 import '../startScreens/startScreen.dart';
 
@@ -56,6 +60,9 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                           {
                             setState(() {
                               isEnglish = true;
+                              LanguageGlobal.isEnglish = true;
+                              var locale = Locale('En');
+                              Get.updateLocale(locale);
                             });
                           },
                         ),
@@ -81,7 +88,12 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                           onTap: ()
                           {
                             setState(() {
+                              var locale = Locale('Ar');
+                              Get.updateLocale(locale);
+                              LanguageGlobal.isEnglish = false;
                               isEnglish = false;
+
+
                             });
                           },
                         ),
@@ -104,7 +116,7 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                   width: double.maxFinite,
                     child: MaterialButton(onPressed: ()
                     {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> StartScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> StartScreen(lang: isEnglish,)));
                     },
                       color: Color(0xFF16CD54),
                     child: Text('Continue', style: TextStyle(color: Colors.white, fontSize: 18),),

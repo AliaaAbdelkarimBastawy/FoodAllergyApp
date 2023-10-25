@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/Knowledge/ShowKnowledge.dart';
 import 'globalsOfKnowledge.dart' as globals;
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 
 
 
@@ -22,12 +23,15 @@ class EditKnowledge extends StatelessWidget {
 
 
 
-  final fb = FirebaseDatabase.instance.reference().child("Knowledge");
+  final fb = LanguageGlobalByAdmin.isEnglish?
+  FirebaseDatabase.instance.reference().child("Knowledge")
+      : FirebaseDatabase.instance.reference().child("KnowledgeArabic");
 
   Future<dynamic> getWhichKnowledgeToUpdate() async {
+
     final ref = FirebaseDatabase.instance.ref();
     var snapshotUpdate;
-    for (int i =0; i< itemsLength+globals.NoOfDeletedItems+5; i++)
+    for (int i =0; i< (4*itemsLength); i++)
     {
       snapshotUpdate =await ref.child('Knowledge/Knowledge$i/Name').get();
       print(snapshotUpdate.value.toString());
@@ -41,6 +45,7 @@ class EditKnowledge extends StatelessWidget {
           'Description': KnowledgeDescription.text,
 
         };
+        print("Abl el updating");
         fb.child("Knowledge$i").set(UpdateKnowledge);
         EditKnowledgeName = KnowledgeTitle.text;
         EditKnowledgeImage = KnowledgeImage.text;
@@ -49,7 +54,7 @@ class EditKnowledge extends StatelessWidget {
       }
       else
       {
-        print("Else Part");
+        print("Ana in Else?");
 
       }
 
@@ -58,6 +63,41 @@ class EditKnowledge extends StatelessWidget {
 
   }
 
+  Future<dynamic> getWhichKnowledgeToUpdateArabic() async {
+
+    final ref = FirebaseDatabase.instance.ref();
+    var snapshotUpdate;
+    for (int i =0; i< (4*itemsLength); i++)
+    {
+      snapshotUpdate =await ref.child('KnowledgeArabic/Knowledge$i/Name').get();
+      print(snapshotUpdate.value.toString());
+      if(EditKnowledgeName== snapshotUpdate.value.toString())
+      {
+        print("IN EL IF CONDITION");
+        Map<String, String> UpdateKnowledge =
+        {
+          'Name' : KnowledgeTitle.text,
+          'Image' : KnowledgeImage.text,
+          'Description': KnowledgeDescription.text,
+
+        };
+        print("Abl el updating");
+        fb.child("Knowledge$i").set(UpdateKnowledge);
+        EditKnowledgeName = KnowledgeTitle.text;
+        EditKnowledgeImage = KnowledgeImage.text;
+        EditKnowledgeDescription = KnowledgeDescription.text;
+
+      }
+      else
+      {
+        print("Ana in Else?");
+
+      }
+
+
+    }
+
+  }
 
    @override
    Widget build(BuildContext context) {
@@ -103,7 +143,7 @@ class EditKnowledge extends StatelessWidget {
              Text("Description", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
              SizedBox(height: 10,),
              TextFormField(
-               controller: KnowledgeDescription ..text = EditKnowledgeDescription,
+               controller: KnowledgeDescription ..text = EditKnowledgeDescription.replaceAll('\\n', '.'),
                decoration: InputDecoration(
                  contentPadding:
                  EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -138,7 +178,17 @@ class EditKnowledge extends StatelessWidget {
                clipBehavior: Clip.antiAliasWithSaveLayer,
                child: MaterialButton(
                  onPressed: () {
-                   getWhichKnowledgeToUpdate();
+                   print("Pressed");
+                   if(LanguageGlobalByAdmin.isEnglish == true)
+                     {
+                       getWhichKnowledgeToUpdate();
+
+                     }
+                   else {
+                     getWhichKnowledgeToUpdateArabic();
+
+                   }
+                   Navigator.pop(context);
                  },
                  child: Text("Update",
                    style: TextStyle(

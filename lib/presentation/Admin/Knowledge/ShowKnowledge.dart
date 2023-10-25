@@ -7,10 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/Knowledge/AddNewKnowledge.dart';
 import 'package:graduationproject26_1/presentation/Admin/Knowledge/EditKnowledge.dart';
-
+import '../../test/KnowledgeDetailsTest_Admin.dart';
 import '../AdminHomePage/AdminHomePage.dart';
 
+import 'KnowledgeDetailsForAdminPanel.dart';
 import 'globalsOfKnowledge.dart' as globals;
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 
 class ShowKnowledge extends StatefulWidget {
 
@@ -20,87 +22,15 @@ class ShowKnowledge extends StatefulWidget {
   State<ShowKnowledge> createState() => _ShowKnowledgeState();
 }
 
-class KnowledgeModel {
-  late final String Name;
-  final Image image;
-  String Description;
-
-  KnowledgeModel(
-      {required this.Name,
-        required this.image,
-      required this.Description});
-}
 
 class _ShowKnowledgeState extends State<ShowKnowledge> {
 
 
-  final fb = FirebaseDatabase.instance.reference().child("Knowledge");
 
-  static List<String> Names = [];
-  static List<String> Images = [];
-  static List<String> Descriptions = [];
-
-  final List<KnowledgeModel> items = [];
-
-  Future<dynamic> getCurrentUserInfo() async {
-    items.clear();
-    final ref = FirebaseDatabase.instance.ref();
-    var snapshot;
-    var snapshot2;
-    var snapshot3;
-
-    Names.clear();
-    Images.clear();
-    Descriptions.clear();
-
-    for (int i = 1; i < 12; i++) {
-      snapshot  = await ref.child('Knowledge/Knowledge$i/Name').get();
-      snapshot2 = await ref.child('Knowledge/Knowledge$i/Image').get();
-      snapshot3 = await ref.child('Knowledge/Knowledge$i/Description').get();
-
-      if(snapshot.value.toString() != "null")
-      {
-        Names.add(snapshot.value.toString());
-        Images.add(snapshot2.value.toString());
-        Descriptions.add(snapshot3.value.toString());
-      }
-
-
-    }
-    for (int i = 0; i < Names.length; i++) {
-      setState(() {
-        items.add(new KnowledgeModel(
-          Name: Names[i],
-          image: Image.network(
-            Images[i],
-            width: 100,
-            height: 100,
-          ), Description: Descriptions[i],));
-        print("items" + items[0].Name);
-      });
-    }
-    print(Names);
-    print(Images);
-  }
-
-  Future<dynamic> getWhichKnowledgeToDelete(int index) async {
-    final ref = FirebaseDatabase.instance.ref();
-    var snapshotDelete;
-    for (int i =0; i< items.length+globals.NoOfDeletedItems; i++)
-    {
-
-      snapshotDelete  = await ref.child('Knowledge/Knowledge$i/Name').get();
-      if(items[index].Name == snapshotDelete.value.toString())
-      {
-        fb.child('Knowledge$i').remove();
-        setState(() {
-          items.removeAt(index);
-        });
-        break;
-      }
-    }
-  }
-
+  final DatabaseReference _knowledgeRef = LanguageGlobalByAdmin.isEnglish?
+  FirebaseDatabase.instance.reference().child('Knowledge'):
+  FirebaseDatabase.instance.reference().child('KnowledgeArabic')
+  ;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +68,109 @@ class _ShowKnowledgeState extends State<ShowKnowledge> {
               margin: EdgeInsets.only(bottom: 20),
               child: SizedBox(
                 height: 530,
-                child: buildList(),
+                child: StreamBuilder(
+                  stream: _knowledgeRef.onValue,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
+                      Map<dynamic, dynamic> values =
+                      snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+                      List<dynamic> knowledgeList = values.values.toList();
+                      return ListView.builder(
+                        itemCount: knowledgeList.length,
+                        itemBuilder: (BuildContext context, int index) {
+
+                          MapEntry<dynamic, dynamic> recipeEntry =
+                          values.entries.elementAt(index);
+                          Map<dynamic, dynamic> knowledgeMap =
+                          recipeEntry.value as Map<dynamic, dynamic>;
+
+                          if(knowledgeMap['Name'].toString() == "null")
+                          {
+                            print("namenull?");
+                            print(knowledgeMap['Name'] );
+                            return Text("");
+                          }
+                          else
+                          {
+                            print("name?");
+                            print(knowledgeMap['Name'] );
+                            return
+                              Container(
+                                height: 70,
+                                child: GestureDetector(
+                                  onTap: ()
+                                  {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                                        KnowledgeDetailsForAdminPanel(KnowledgeDescription: knowledgeMap['Description'],
+                                          KnowledgeTitle: knowledgeMap['Name'],
+                                          KnowledgeImage: knowledgeMap['Image'],)));
+                                  },
+                                  child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      child: ListTile(
+                                        title: Container(
+                                          child: Text(
+                                            knowledgeMap['Name'],
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+
+                                        // leading: items[index].image,
+                                        leading: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minWidth: 44,
+                                            minHeight: 44,
+                                            maxWidth: 64,
+                                            maxHeight: 64,
+                                          ),
+                                          child: Image.network(
+                                            knowledgeMap['Image'],
+                                            width: 100,
+                                            height: 100,
+                                          ),
+                                        ),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [IconButton(icon: Icon(Icons.edit),
+                                            onPressed: () {
+                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                                  EditKnowledge(
+                                                    itemsLength: knowledgeList.length,
+                                                    EditKnowledgeName: knowledgeMap['Name'],
+                                                    EditKnowledgeImage: knowledgeMap['Image'],
+                                                    EditKnowledgeDescription: knowledgeMap['Description'],
+
+                                                  )));
+                                            },),
+                                            IconButton(icon: Icon(Icons.delete),
+                                              onPressed: () {
+                                                _knowledgeRef.child(recipeEntry.key!).remove();
+                                              },)],
+                                        ),
+                                      )),
+                                ),
+                              );
+
+                          }
+
+                        },
+                      );
+
+
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error retrieving recipe data'),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
               ),
             )
           ],
@@ -156,59 +188,8 @@ class _ShowKnowledgeState extends State<ShowKnowledge> {
     );
   }
 
-
-  Widget buildList() =>
-      ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return  Container(
-              height: 70,
-              child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: ListTile(
-                    title: Container(
-                      child: Text(
-                        items[index].Name,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-
-                    // leading: items[index].image,
-                    leading: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: 44,
-                        minHeight: 44,
-                        maxWidth: 64,
-                        maxHeight: 64,
-                      ),
-                      child: items[index].image,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [IconButton(icon: Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                              EditKnowledge(
-                                EditKnowledgeName: items[index].Name, EditKnowledgeImage:Images[index],
-                                EditKnowledgeDescription: items[index].Description, itemsLength: items.length,  )));
-                        },),
-                        IconButton(icon: Icon(Icons.delete),
-                          onPressed: () {
-                            globals.NoOfDeletedItems++;
-                            getWhichKnowledgeToDelete(index);
-
-                          },)],
-                    ),
-                  )),
-            );
-          });
-
   @override
   void initState() {
     super.initState();
-    getCurrentUserInfo();
   }
 }

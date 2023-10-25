@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/MenuDishes/ShowDishes.dart';
 import 'package:graduationproject26_1/presentation/Admin/DishesCounterGlobal.dart' as globalsDishesCounter;
 import '../Restaurant/ShowRestaurant.dart';
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 
 class AddNewDish extends StatefulWidget {
   var RestaurantName;
-  List<String> ImagesOfDishes = [];
   var itemsLength;
-  AdminRestaurantModel detailsModel;
-  AddNewDish({Key? key, required this.RestaurantName, required this.itemsLength,
-    required this.detailsModel, required this.ImagesOfDishes}) : super(key: key);
+  AddNewDish({Key? key, required this.RestaurantName, required this.itemsLength,}) : super(key: key);
 
   @override
   State<AddNewDish> createState() => _AddNewDishState();
@@ -27,18 +25,22 @@ class _AddNewDishState extends State<AddNewDish> {
 
   var DishCounter = 1;
 
-  final fb = FirebaseDatabase.instance.reference().child("Restaurants");
-
+  final DatabaseReference fb =LanguageGlobalByAdmin.isEnglish?
+  FirebaseDatabase.instance.reference().child('Restaurants'):
+  FirebaseDatabase.instance.reference().child('RestaurantsArabic');
   Future<dynamic> getWhichRestaurantToAddDishesTo() async {
     final ref = FirebaseDatabase.instance.ref();
     var snapshotAddDish;
     var snapshot;
-    String dishCount1;
-    for (int i =0; i< widget.itemsLength; i++)
+    for (int i =0; i< 10; i++)
     {
+      print("RestaurantNameForLoop");
+      print(widget.RestaurantName);
       snapshotAddDish = await ref.child('Restaurants/Restaurant$i/Name').get();
       if(widget.RestaurantName == snapshotAddDish.value.toString())
       {
+        print("RestaurantName");
+        print(widget.RestaurantName);
         int dishCount;
         snapshot = await ref.child('Restaurants/Restaurant$i/DishCounter/Counter').get();
         print("DishCounter");
@@ -52,8 +54,6 @@ class _AddNewDishState extends State<AddNewDish> {
           'ListOfcontainedAllergies' : DishAllergyContained.text
         };
 
-        widget.ImagesOfDishes.add(DishImage.text);
-        int counterOfDish = globalsDishesCounter.DishCounter;
         fb.child("Restaurant$i/Menu/dish$dishCount").set(dishes);
         print("ADD");
         print(dishCount);
@@ -74,8 +74,58 @@ class _AddNewDishState extends State<AddNewDish> {
             globalsDishesCounter.DishesCounterList[j]++;
           }
         }
-        widget.detailsModel.MenuList.add(AdminMenuModel(dishName: DishName.text,
-            dishImage:Image.network(DishImage.text), dishDetails: DishAllergyContained.text));
+
+      }
+    }
+
+  }
+  Future<dynamic> getWhichRestaurantToAddDishesToArabic() async {
+    final ref = FirebaseDatabase.instance.ref();
+    var snapshotAddDish;
+    var snapshot;
+    for (int i =0; i< 10; i++)
+    {
+      print("RestaurantNameForLoop");
+      print(widget.RestaurantName);
+      snapshotAddDish = await ref.child('RestaurantsArabic/Restaurant$i/Name').get();
+      if(widget.RestaurantName == snapshotAddDish.value.toString())
+      {
+        print("RestaurantName");
+        print(widget.RestaurantName);
+        int dishCount;
+        snapshot = await ref.child('RestaurantsArabic/Restaurant$i/DishCounter/Counter').get();
+        print("DishCounter");
+        print(int.parse(snapshot.value.toString()));
+        globalsDishesCounter.DishCounter = int.parse(snapshot.value.toString());
+        dishCount = globalsDishesCounter.DishCounter;
+        Map<String, String> dishes =
+        {
+          'Name' : DishName.text,
+          'Image' : DishImage.text,
+          'ListOfcontainedAllergies' : DishAllergyContained.text
+        };
+
+        fb.child("Restaurant$i/Menu/dish$dishCount").set(dishes);
+        print("ADD");
+        print(dishCount);
+        dishCount++;
+        Map<String, String> count =
+        {
+          'Counter' : dishCount.toString(),
+        };
+
+        fb.child("Restaurant$i/DishCounter").set(count);
+        globalsDishesCounter.DishCounter ++;
+
+
+        for(int j =0; j< globalsDishesCounter.RestaurantsList.length; j++)
+        {
+          if (widget.RestaurantName == globalsDishesCounter.RestaurantsList[j])
+          {
+            globalsDishesCounter.DishesCounterList[j]++;
+          }
+        }
+
       }
     }
 
@@ -87,8 +137,10 @@ class _AddNewDishState extends State<AddNewDish> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(leading: IconButton(icon: Icon(Icons.arrow_back),
         onPressed: ()
-        {Navigator.push(context, MaterialPageRoute(builder: (context)=>
-            ShowDishes(detailsModel: widget.detailsModel, itemsLength: widget.itemsLength, ImagesOfDishes: widget.ImagesOfDishes,)));
+        {
+          Navigator.pop(context);
+          // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+            // ShowDishes(detailsModel: widget.detailsModel, itemsLength: widget.itemsLength, ImagesOfDishes: widget.ImagesOfDishes,)));
         },),
         title: Text("Add New Dish"),
         backgroundColor: Color(0xFF16CD54),
@@ -155,7 +207,18 @@ class _AddNewDishState extends State<AddNewDish> {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: MaterialButton(
                 onPressed: () {
-                  getWhichRestaurantToAddDishesTo();
+                  if(LanguageGlobalByAdmin.isEnglish == true)
+                    {
+                      getWhichRestaurantToAddDishesTo();
+
+                    }
+                  else
+                    {
+                      getWhichRestaurantToAddDishesToArabic();
+
+                    }
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                  ShowRestaurant()));
                 },
                 child: Text("Add",
                   style: TextStyle(

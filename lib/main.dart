@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:graduationproject26_1/LocalString.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:graduationproject26_1/pages/auth/login_page.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:graduationproject26_1/pages/home_page.dart';
 import 'package:graduationproject26_1/presentation/Admin/AdminHomePage/AdminHomePage.dart';
 import 'package:graduationproject26_1/presentation/Admin/Category/CategoryItem/AddNewCategoryItem.dart';
@@ -25,38 +28,28 @@ import 'package:graduationproject26_1/presentation/Admin/Recipe/ShowRecipes.dart
 import 'package:graduationproject26_1/presentation/Admin/Restaurant/AddNewRestaurant.dart';
 import 'package:graduationproject26_1/presentation/Admin/Restaurant/EditRestaurant.dart';
 import 'package:graduationproject26_1/presentation/Admin/Restaurant/ShowRestaurant.dart';
+import 'package:graduationproject26_1/presentation/Admin/fileToTest.dart';
+import 'package:graduationproject26_1/presentation/Admin/test_RecipesAdmin.dart';
 import 'package:graduationproject26_1/presentation/UserProfile/EditUserProfile.dart';
 import 'package:graduationproject26_1/presentation/loginScreen/loginScreen.dart';
+import 'package:graduationproject26_1/presentation/mainScreen/MainScreen.dart';
+import 'package:graduationproject26_1/presentation/mainScreen/MainScreen2.dart';
 import 'package:graduationproject26_1/presentation/profileScreen/profileScreen.dart';
+import 'package:graduationproject26_1/presentation/selectLanguageScreen/selectLanguageScreen.dart';
 import 'package:graduationproject26_1/presentation/signUpScreen/signUpScreen.dart';
 import 'package:graduationproject26_1/presentation/splashScreen/splashScreen.dart';
+import 'package:graduationproject26_1/presentation/test/RestaurantTest.dart';
+import 'package:graduationproject26_1/presentation/test/TestTheListen.dart';
+import 'package:graduationproject26_1/presentation/test/test.dart';
 import 'package:graduationproject26_1/shared/constants.dart';
 import 'Alcohol-TextRecognition/Main-TextRecognition.dart';
 import 'fetchData.dart';
 import 'helper/helper_function.dart';
 
 
-// void main() async{
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-//   runApp(MyApp());
-// }
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: SignUpScreen(),
-//       debugShowCheckedModeBanner: false,
-//     );
-//   }
-// }
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   if (kIsWeb) {
     await Firebase.initializeApp(
         options: FirebaseOptions(
@@ -77,8 +70,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SignUpScreen(),
+    return GetMaterialApp(
+      translations: LocalString(),
+      locale: Locale('En'),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

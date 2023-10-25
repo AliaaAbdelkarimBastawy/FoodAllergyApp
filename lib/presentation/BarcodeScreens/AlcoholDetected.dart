@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import '../../Alcohol-TextRecognition/Main-TextRecognition.dart';
 import 'BarcodeScanner.dart';
@@ -36,7 +37,7 @@ class AlcoholDetected extends StatelessWidget {
                     child: Image(image: AssetImage('Assets/Images/alcohol.png',
                      ),)
                 ),
-                Center(child: Text("Alcohol Detected!", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold,color: Colors.red),)),
+                Center(child: Text("Alcohol Detected!".tr, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold,color: Colors.red),)),
                 SizedBox(height: 20,),
                 Container(
                   margin: const EdgeInsets.only(left: 100, right:100, ),
@@ -52,7 +53,7 @@ class AlcoholDetected extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> BarcodeScanner()));
 
                   },
-                    child: Text("OK",
+                    child: Text("OK".tr,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,

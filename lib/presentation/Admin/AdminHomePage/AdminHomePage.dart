@@ -1,13 +1,19 @@
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/Category/CategorySection/ShowCategory.dart';
 import 'package:graduationproject26_1/presentation/Admin/Knowledge/ShowKnowledge.dart';
 import 'package:graduationproject26_1/presentation/Admin/Recipe/ShowRecipes.dart';
 import 'package:graduationproject26_1/presentation/Admin/Restaurant/ShowRestaurant.dart';
+import 'package:graduationproject26_1/presentation/Language/LanguageScreen.dart';
 import 'package:graduationproject26_1/presentation/mainScreen/MainScreen.dart';
+import '../../../helper/helper_function.dart';
+import '../../mainScreen/MainScreen2.dart';
+import 'globals.dart' as globals;
 
 import '../../RecipesScreen/RecipesScreen.dart';
+import '../../TextRecognition/home.notifer_2.dart';
 import '../../loginScreen/loginScreen.dart';
 import '../../recipesDetails/recipes_Details.dart';
 
@@ -21,6 +27,11 @@ class AdminHomePageModel {
       });
 }
 
+@override
+void initState() {
+  globals.WhichMainScreen2=1;
+}
+
 class AdminHomePage extends StatefulWidget {
    AdminHomePage({Key? key}) : super(key: key);
 
@@ -29,11 +40,16 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
+  String userName = "";
+  String email = "";
+  String getName = "";
+  String getEmail = "";
+  String getPassword = "";
    final List<AdminHomePageModel> items = [];
-   static List<String> Titles = ["Menus", "Recipes", "Categories", "Knowledge", "User View"];
+   static List<String> Titles = ["Menus", "Recipes", "Categories", "Knowledge", "User View","Language"];
    static List<String> Images = ['Assets/Images/Menu1.png','Assets/Images/Recipe1.png','Assets/Images/Category1.png',
      'Assets/Images/Knowledge2.png',
-     'Assets/Images/eye.png'];
+     'Assets/Images/eye.png', 'Assets/Images/languages.png'];
    // static List<String> ShowPages = ["ShowRestaurant", "ShowRecipes", "ShowCategory", 
    //   "ShowKnowledge", "MainScreen"];
 
@@ -130,7 +146,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
                        ),
                        SizedBox(width: 10,),
-                       Text('Admin1',
+                       Text(globals.username,
                          style: TextStyle(fontSize:18,fontWeight: FontWeight.bold, color: Colors.white),),
                      ],
                    ),
@@ -185,9 +201,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
                
                else if (index ==4)
                  {
-                   Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0,
-                     drawer: false,)));
+                   globals.WhichMainScreen2 =1;
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen2(Current: 0,)));
 
+                 }
+               else
+                 {
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=> EditLanguageScreen()));
                  }
              },
              child: Container(
@@ -229,6 +249,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
    @override
    void initState() {
+     getUserData();
      super.initState();
      getCurrentUserInfo();
    }
@@ -278,5 +299,48 @@ class _AdminHomePageState extends State<AdminHomePage> {
      );
    }
 
+
+   var snapshotName;
+   var snapshotEmail;
+   var snapshotPassword;
+
+   Future<dynamic> getUserData() async {
+     final ref = FirebaseDatabase.instance.ref();
+     var authenVariable = auth.currentUser?.uid;
+     final fb = FirebaseDatabase.instance.reference().child("$authenVariable");
+
+     snapshotName = await ref.child('$authenVariable/UserData/Name').get();
+     snapshotEmail = await ref.child('$authenVariable/UserData/Email').get();
+     snapshotPassword = await ref.child('$authenVariable/UserData/Password').get();
+
+     setState(() {
+       getName = snapshotName.value.toString();
+       globals.username = getName;
+
+       if(globals.username == "null")
+       {
+         gettingUserData();
+         print("NameIfNull");
+         print(getName);
+       }
+
+       getEmail = snapshotEmail.value.toString();
+       getPassword = snapshotPassword.value.toString();
+     });
+
+   }
+
+  gettingUserData() async {
+    print("gettingUserData");
+    await HelperFunctions.getUserNameFromSF().then((val) {
+      setState(() {
+        getName = val!;
+        globals.username = getName;
+        print("Line 139");
+        print(getName);
+      });
+    });
+    // getting the list of snapshots in our stream
+  }
 
 }

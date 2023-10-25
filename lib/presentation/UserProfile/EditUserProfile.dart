@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduationproject26_1/presentation/loginScreen/loginScreen.dart';
 import 'package:graduationproject26_1/presentation/profileScreen/profileScreen.dart';
 import 'package:http/http.dart' as http;
@@ -70,8 +71,8 @@ class _editAccountScreenState extends State<editAccountScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Text(
-                    "Edit Account",
+                   Text(
+                    "Edit Account".tr,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -83,10 +84,10 @@ class _editAccountScreenState extends State<editAccountScreen> {
                   ),
                   TextFormField(
                     controller: UserName..text = widget.Name,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 10.0),
-                      hintText: "Edit username",
+                      hintText: "Edit username".tr,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.person),
                       enabledBorder: OutlineInputBorder(
@@ -101,10 +102,10 @@ class _editAccountScreenState extends State<editAccountScreen> {
                   ),
                   TextFormField(
                     controller: UserEmail..text = widget.Email,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 10.0),
-                      hintText: "Edit email",
+                      hintText: "Edit email".tr,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email),
                       enabledBorder: OutlineInputBorder(
@@ -136,8 +137,8 @@ class _editAccountScreenState extends State<editAccountScreen> {
                                   UsernameController: UserName,
                                   PasswordController: UserPassword,)));
                       },
-                      child: const Text(
-                        "Edit Allergies",
+                      child:  Text(
+                        "Edit Allergies".tr,
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -160,8 +161,8 @@ class _editAccountScreenState extends State<editAccountScreen> {
                       onPressed: () {
                         UpdateData();
                       },
-                      child: const Text(
-                        "Update",
+                      child:  Text(
+                        "Update".tr,
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,

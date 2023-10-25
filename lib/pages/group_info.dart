@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../helper/helper_function.dart';
 import '../service/database_service.dart';
@@ -28,6 +29,7 @@ class _GroupInfoState extends State<GroupInfo> {
   @override
   void initState() {
     getMembers();
+    gettingUserData();
     super.initState();
   }
 
@@ -47,6 +49,8 @@ class _GroupInfoState extends State<GroupInfo> {
     await HelperFunctions.getUserEmailFromSF().then((val) {
       setState(() {
         Email = val!;
+        print("Email");
+        print(Email);
       });
     });
 
@@ -68,7 +72,7 @@ class _GroupInfoState extends State<GroupInfo> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Color(0xFF16CD54),
-        title: const Text("Group Info"),
+        title:  Text("Group Info".tr),
         actions: [
           IconButton(
               onPressed: () {
@@ -77,9 +81,9 @@ class _GroupInfoState extends State<GroupInfo> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Text("Exit"),
+                        title:  Text("Exit".tr),
                         content:
-                            const Text("Are you sure you exit the group? "),
+                             Text("Are you sure you exit the group?".tr),
                         actions: [
                           IconButton(
                             onPressed: () {
@@ -101,7 +105,7 @@ class _GroupInfoState extends State<GroupInfo> {
                                       getName(widget.adminName),
                                       widget.groupName)
                                   .whenComplete(() {
-                                    if (Email == "aly@yahoo.com")
+                                    if (Email == "haidy50@yahoo.com")
                                       {
                                         nextScreenReplace(context,  HomePage(profileVisible: false, CreateGroupButton: true,));
 
@@ -152,14 +156,24 @@ class _GroupInfoState extends State<GroupInfo> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Group: ${widget.groupName}",
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      Row(
+                        children:[
+                          Text( "Group:".tr,style:TextStyle(fontWeight: FontWeight.w500), ),
+                          Text( "${widget.groupName}",style:TextStyle(fontWeight: FontWeight.w500), ),
+                        ]
+
                       ),
+
                       const SizedBox(
                         height: 5,
                       ),
-                      Text("Admin: ${getName(widget.adminName)}")
+                      Row(
+                          children:[
+                            Text( "Admin:".tr,),
+                            Text( "${getName(widget.adminName)}", ),
+                          ]
+
+                      ),
                     ],
                   )
                 ],
@@ -208,13 +222,13 @@ class _GroupInfoState extends State<GroupInfo> {
                   },
                 );
               } else {
-                return const Center(
-                  child: Text("NO MEMBERS"),
+                return  Center(
+                  child: Text("NO MEMBERS".tr),
                 );
               }
             } else {
-              return const Center(
-                child: Text("NO MEMBERS"),
+              return  Center(
+                child: Text("NO MEMBERS".tr),
               );
             }
           } else {

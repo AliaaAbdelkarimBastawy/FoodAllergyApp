@@ -1,13 +1,14 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduationproject26_1/presentation/UserProfile/EditUserProfile.dart';
 import '../../helper/helper_function.dart';
+import '../Language/LanguageScreenOfUser.dart';
 import 'globalsOfUserData.dart' as globals;
 import '../../data/profileScreen/profileScreenModel.dart';
 import '../HomeScreen/HomeScreen.dart';
 import '../Language/LanguageScreen.dart';
 import '../TextRecognition/home.notifer_2.dart';
-import '../favoritesScreen/FavoritesScreen.dart';
 import '../mainScreen/MainScreen.dart';
 import '../signUpScreen/signUpScreen.dart';
 
@@ -21,16 +22,13 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String getName = "";
-
   String userName = "";
   String getEmail = "";
-
   String getPassword = "";
 
   List<ProfileViewModel> ProfileScreensList = [
-    ProfileViewModel(title: "My Favorites", icon: Icons.favorite),
     ProfileViewModel(title: "Edit Account", icon: Icons.account_circle_outlined),
-    ProfileViewModel(title: "Language", icon: Icons.language),
+    // ProfileViewModel(title: "Change Language", icon: Icons.language),
   ];
 
    var snapshotName;
@@ -82,8 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         ),
         title:  Padding(
-          padding: const EdgeInsets.only(left: 100.0),
-          child: Text("Profile"),
+          padding: const EdgeInsets.only(left: 90.0),
+          child: Text("Profile".tr),
         )
       ),
       body: Padding(
@@ -100,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.grey[700],
                   ),
                 ),
-                Text(userName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                Text(getName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 SizedBox(height: 20,),
               ],
 
@@ -117,26 +115,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       GestureDetector(
                           onTap: ()
                           {
-                            if(ProfileScreensList[index].title == "My Favorites")
-                              {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> FavoritesScreen()));
 
-                              }
-
-                            else if(ProfileScreensList[index].title == "Edit Account")
+                            if(ProfileScreensList[index].title == "Edit Account")
                             {
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>
                                   editAccountScreen(Name: getName, Email: getEmail, Password: getPassword,)));
 
                             }
+                            // else
+                            //   {
+                            //     Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            //     EditLanguageScreenOfUser()));
+                            //   }
 
-                            else if(ProfileScreensList[index].title == "Language")
-                            {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditLanguageScreen()));
-
-                            }
 
                           },
+
                           child: buildStartScreensItem(ProfileScreensList[index])),
                       separatorBuilder: (context, index) {
                         return Divider();},
@@ -166,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                SizedBox(width: 10,),
                Icon(model.icon),
                SizedBox(width: 10,),
-               Text('${model.title}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+               Text('${model.title}'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                Spacer(),
                Padding(
                  padding: const EdgeInsets.all(8.0),

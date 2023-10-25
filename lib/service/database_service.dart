@@ -21,7 +21,6 @@ class DatabaseService {
       "uid": uid,
     });
   }
-
   // getting user data
   Future gettingUserData(String email) async {
     QuerySnapshot snapshot =

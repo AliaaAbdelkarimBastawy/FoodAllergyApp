@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../helper/helper_function.dart';
 import '../../pages/home_page.dart';
 import '../../service/auth_service.dart';
@@ -23,8 +24,6 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
-
   bool _isLoading = false;
   final formKey = GlobalKey<FormState>();
   String email = "";
@@ -65,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(
                     height: 20,),
-                  Text("Create Account",
+                  Text("Create Account".tr,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -78,15 +77,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: UsernameController,
                       validator: (String? value) {
                         if (value != null && value.isEmpty) {
-                          return "Username can't be empty";
+                          return "Username can't be empty".tr;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                        labelText: "Username",
-                        hintText: "Enter your name",
+                        labelText: "Username".tr,
+                        hintText: "Enter your name".tr,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.person),
                         enabledBorder: OutlineInputBorder(
@@ -102,15 +101,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: EmailController,
                       validator: (String? value) {
                         if (value != null && value.isEmpty) {
-                          return "Email can't be empty";
+                          return "Email can't be empty".tr;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                        labelText: "Email",
-                        hintText: "Enter your email",
+                        labelText: "Email".tr,
+                        hintText: "Enter your email".tr,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.email),
                         enabledBorder: OutlineInputBorder(
@@ -129,16 +128,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: PasswordController,
                       validator: (String? value) {
                         if (value != null && value.isEmpty) {
-                          return "Password can't be empty";
+                          return "Password can't be empty".tr;
                         }
-                        return null;
+
+                        else if(value != null && value.length < 8)
+                          {
+                            showSnackbar(context, Colors.red, "Password must be at least 8 characters".tr);
+                          }
                       },
                       obscureText: isPassword,
                       decoration: InputDecoration(
                         contentPadding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                        labelText: "Password",
-                        hintText: "Enter your password",
+                        labelText: "Password".tr,
+                        hintText: "Enter your password".tr,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.lock),
                         suffixIcon: IconButton(icon: isPassword ? Icon(
@@ -161,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Must be at least 8 characters,contain at least 1 number and 1 special character",
+                          "Must be at least 8 characters,contain at least 1 number".tr,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 12,),),
@@ -176,11 +179,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: MaterialButton(
                       onPressed: () {
-                      if (FormKey.currentState!.validate()) {
                         SignUp();
-                      }
                     },
-                      child: Text("Continue",
+                      child: Text("Sign up".tr,
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,),),
@@ -188,12 +189,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Already have an account?"),
+                      Text("Already have an account?".tr),
                       SizedBox(width: 0,),
                       TextButton(onPressed:(){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=> loginScreen()));
                       },
-                        child: Text("Login ", style:
+                        child: Text("Login".tr, style:
                         TextStyle(
                             fontWeight: FontWeight.bold
                         ),),
@@ -213,26 +214,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
 
-  // Future SignUp() async {
-  //   try {
-  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //       email: EmailController.text.trim(),
-  //       password: PasswordController.text.trim(),
-  //     );
-  //
-  //     Navigator.push(context, MaterialPageRoute(
-  //         builder: (context) => SelectAllergyScreen(EmailController:
-  //         EmailController, UsernameController: UsernameController,
-  //           PasswordController: PasswordController,)));
-  //   } on FirebaseAuthException catch (e) {
-  //     print(e);
-  //   }
-  //
-  // }
-
-
   SignUp() async {
-    if (FormKey.currentState!.validate()) {
+
       setState(() {
         _isLoading = true;
       });
@@ -249,21 +232,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
           EmailController, UsernameController: UsernameController,
             PasswordController: PasswordController,));
         } else {
+          if(PasswordController.text.length <8 && (PasswordController.text.contains("1")||PasswordController.text.contains("2")
+              ||PasswordController.text.contains("3")
+              ||PasswordController.text.contains("4")
+              ||PasswordController.text.contains("5")
+              ||PasswordController.text.contains("6")
+              ||PasswordController.text.contains("7")
+              ||PasswordController.text.contains("8")
+              ||PasswordController.text.contains("9")
+              ||PasswordController.text.contains("0")
+          ))
+            {
+              value = "Password must be at least 8 characters";
+            }
+
+          else if(PasswordController.text.length < 8  && !(PasswordController.text.contains("1")||PasswordController.text.contains("2")
+              ||PasswordController.text.contains("3")
+              ||PasswordController.text.contains("4")
+              ||PasswordController.text.contains("5")
+              ||PasswordController.text.contains("6")
+              ||PasswordController.text.contains("7")
+              ||PasswordController.text.contains("8")
+              ||PasswordController.text.contains("9")
+              ||PasswordController.text.contains("0")
+          ))
+            {
+              value = "Password must be at least 8 characters and contain at least 1 number";
+
+            }
+
+          else if(PasswordController.text.length >8  && !(PasswordController.text.contains("1")||PasswordController.text.contains("2")
+              ||PasswordController.text.contains("3")
+              ||PasswordController.text.contains("4")
+              ||PasswordController.text.contains("5")
+              ||PasswordController.text.contains("6")
+              ||PasswordController.text.contains("7")
+              ||PasswordController.text.contains("8")
+              ||PasswordController.text.contains("9")
+              ||PasswordController.text.contains("0")
+          ))
+          {
+            value = "Password must contain at least 1 number";
+
+          }
+
           showSnackbar(context, Colors.red, value);
           setState(() {
             _isLoading = false;
           });
         }
       });
-    }
+
   }
-
-
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  late DatabaseReference reference;
-  FirebaseDatabase db = FirebaseDatabase.instance;
-
-
 
 
 }

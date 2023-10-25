@@ -4,12 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:graduationproject26_1/presentation/Admin/Recipe/ShowRecipes.dart';
+import '../Admin/AdminHomePage/globals.dart';
+import '../Admin/Knowledge/ShowKnowledge.dart';
 import '../RecipesScreen/RecipesScreen.dart';
 
 import 'package:flutter/material.dart';
-
+import '../Admin/Recipe/FromUserOrAdminPage.dart' as globals;
 import '../mainScreen/MainScreen.dart';
 
+import '../Admin/AdminHomePage/globals.dart' as AdminGlobals;
+import '../mainScreen/MainScreen2.dart';
 const kPrimaryColor= Colors.black;
 const KMainTextColor= Color(0xFF000000);
 const KsecondaryColor= Color(0xFF16CD54);
@@ -46,8 +51,29 @@ class RecipeDetailScreen extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                MainScreen(Current: 0, drawer: 1,)));
+
+             if(globals.FromUser == 0) {
+                   Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                       ShowRecipes()));
+
+            }
+
+            else if(globals.FromUser ==2)
+              {
+                if(AdminGlobals.WhichMainScreen2 ==1)
+                  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                        MainScreen2(Current: 2)));
+                  }
+                else
+                  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                        MainScreen(Current: 2, drawer: true,)));
+                  }
+
+
+              }
+
 
           },
         ),

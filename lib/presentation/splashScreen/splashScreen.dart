@@ -4,12 +4,13 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graduationproject26_1/presentation/startScreens/startScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 import '../loginScreen/loginScreen.dart';
 import '../selectLanguageScreen/selectLanguageScreen.dart';
-
+import 'package:graduationproject26_1/languageGlobal.dart' as LanguageGlobal;
 class SplashScreen extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -59,16 +60,30 @@ class SplashScreen extends StatefulWidget{
     if (FirstTime == true)
       {
         Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) => loginScreen()
+            builder: (context) => SelectLanguageScreen()
         )
         );
       }
     else
       {
+        // if(LanguageGlobal.isEnglish == false)
+        //   {
+        //     Navigator.pushReplacement(context, MaterialPageRoute(
+        //         builder: (context) => StartScreen(lang: false,)
+        //     )  );
+        //   }
+        //
+        // else
+        //   {
+        //     Navigator.pushReplacement(context, MaterialPageRoute(
+        //         builder: (context) => StartScreen(lang: true,)
+        //     )  );
+        //   }
+        //
+
         Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) => SelectLanguageScreen()
-        )
-        );
+            builder: (context) => SelectLanguageScreen()));
+     
       }
  
     }

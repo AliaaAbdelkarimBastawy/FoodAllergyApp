@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'globalsAdminRecipes.dart' as globals;
 import 'package:graduationproject26_1/presentation/Admin/DishesCounterGlobal.dart' as globalsDishesCounter;
 import 'package:graduationproject26_1/presentation/Admin/Recipe/ShowRecipes.dart';
-
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 class AddNewRecipe extends StatelessWidget {
    AddNewRecipe({Key? key}) : super(key: key);
    var RecipeName = TextEditingController();
@@ -14,7 +14,10 @@ class AddNewRecipe extends StatelessWidget {
    var TimeInMinutes = TextEditingController();
    var RecipeImage = TextEditingController();
 
-   final fb = FirebaseDatabase.instance.reference().child("Recipes");
+   final fb = LanguageGlobalByAdmin.isEnglish ?
+   FirebaseDatabase.instance.reference().child("Recipes"):
+   FirebaseDatabase.instance.reference().child("RecipesArabic");
+
 
    Future<dynamic> AddRecipe() async {
      final ref = FirebaseDatabase.instance.ref();
@@ -28,8 +31,8 @@ class AddNewRecipe extends StatelessWidget {
      {
        'Name' : RecipeName.text,
        'image' : RecipeImage.text,
-       'Ingredients': Ingredients.text,
-       'Directions': Directions.text,
+       'Ingredients': Ingredients.text.replaceAll('.', '\\n'),
+       'Directions': Directions.text.replaceAll('.', '\\n'),
        'Duration': TimeInMinutes.text,
        'ContainedAllergyType': RecipeAllergiesContained.text,
      };
@@ -48,21 +51,37 @@ class AddNewRecipe extends StatelessWidget {
      globalsDishesCounter.RecipeCounter++;
    }
 
-
-
-
-
-   Future<dynamic> getRecipeID() async {
+   Future<dynamic> AddRecipeArabic() async {
      final ref = FirebaseDatabase.instance.ref();
-       var snapshot;
-       snapshot  = await ref.child('Recipes/RecipeID/ID').get();
-       print("Valueee");
-       print(snapshot.value.toString());
-       globals.RecipeID = int.parse(snapshot.value.toString());
-       print(globals.RecipeID);
-       print(int.parse(snapshot.value.toString()));
-     }
+     var snapshot;
+     int RecipeCount;
+     snapshot = await ref.child('RecipesArabic/RecipeCounter/Counter').get();
+     globalsDishesCounter.RecipeCounter= int.parse(snapshot.value.toString());
+     RecipeCount =  globalsDishesCounter.RecipeCounter;
 
+     Map<String, String> recipes =
+     {
+       'Name' : RecipeName.text,
+       'image' : RecipeImage.text,
+       'Ingredients': Ingredients.text.replaceAll('.', '\\n'),
+       'Directions': Directions.text.replaceAll('.', '\\n'),
+       'Duration': TimeInMinutes.text,
+       'ContainedAllergyType': RecipeAllergiesContained.text,
+     };
+
+     fb.child("Recipe$RecipeCount").set(recipes);
+
+     RecipeCount++;
+
+     print(RecipeCount);
+     Map<String, String> count =
+     {
+       'Counter' : RecipeCount.toString(),
+     };
+
+     fb.child("RecipeCounter").set(count);
+     globalsDishesCounter.RecipeCounter++;
+   }
 
    @override
    Widget build(BuildContext context) {
@@ -187,7 +206,16 @@ class AddNewRecipe extends StatelessWidget {
                  clipBehavior: Clip.antiAliasWithSaveLayer,
                  child: MaterialButton(
                    onPressed: () {
-                     AddRecipe();
+                     if(LanguageGlobalByAdmin.isEnglish == true)
+                       {
+                         AddRecipe();
+                       }
+                    else
+                      {
+                        AddRecipeArabic();
+                      }
+                     Navigator.pop(context);
+
                      // });
                    },
                    child: Text("Add",

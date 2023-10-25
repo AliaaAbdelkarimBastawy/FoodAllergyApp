@@ -1,13 +1,17 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduationproject26_1/presentation/Admin/Recipe/AddNewRecipe.dart';
 import 'package:graduationproject26_1/presentation/Admin/Recipe/EditRecipe.dart';
+import 'package:graduationproject26_1/presentation/recipesDetails/recipes_Details.dart';
+import 'RecipeDetailsForAdminPanel.dart';
 import 'globalsAdminRecipes.dart' as globals;
+import 'FromUserOrAdminPage.dart' as globalsFromUser;
 
 import '../../RecipesScreen/RecipesScreen.dart';
 import '../AdminHomePage/AdminHomePage.dart';
-
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 class ShowRecipes extends StatefulWidget {
   const ShowRecipes({Key? key}) : super(key: key);
 
@@ -15,87 +19,12 @@ class ShowRecipes extends StatefulWidget {
   State<ShowRecipes> createState() => _ShowRecipesState();
 }
 
+
 class _ShowRecipesState extends State<ShowRecipes> {
 
-  final fb = FirebaseDatabase.instance.reference().child("Recipes");
 
-  List<recipeModel> list = [];
-  static List<String> Names = [];
-  static List<String> Images = [];
-  static List<String> durations = [];
-  static List<String> directionss = [];
-  static List<String> containedAllergies = [];
-  static List<String> ingredientss = [];
-
-  final List<recipeModel> items = [];
-
-  Future<dynamic> getCurrentUserInfo() async {
-    items.clear();
-    final ref = FirebaseDatabase.instance.ref();
-
-    var snapshot;
-    var snapshot2;
-    var snapshot3;
-    var snapshot4;
-    var snapshot5;
-    var snapshot6;
-
-    Names.clear();
-    Images.clear();
-    for (int i = 1; i < 12; i++) {
-      snapshot  = await ref.child('Recipes/Recipe$i/Name').get();
-      snapshot2 = await ref.child('Recipes/Recipe$i/image').get();
-      snapshot3 = await ref.child('Recipes/Recipe$i/ContainedAllergyType').get();
-      snapshot4 = await ref.child('Recipes/Recipe$i/Ingredients').get();
-      snapshot5 = await ref.child('Recipes/Recipe$i/Duration').get();
-      snapshot6 = await ref.child('Recipes/Recipe$i/Directions').get();
-
-      if(snapshot.value.toString() != "null")
-      {
-        Names.add(snapshot.value.toString());
-        Images.add(snapshot2.value.toString());
-        containedAllergies.add(snapshot3.value.toString());
-        ingredientss.add(snapshot4.value.toString());
-        durations.add(snapshot5.value.toString());
-        directionss.add(snapshot6.value.toString());
-      }
-
-
-    }
-    for (int i = 0; i < Names.length; i++) {
-      setState(() {
-        items.add(new recipeModel(
-          Name: Names[i],
-          image: Image.network(
-            Images[i],
-            width: 100,
-            height: 100,
-          ), containedAllery: containedAllergies[i], direction: directionss[i]
-          ,duration: durations[i] ,ingredients: ingredientss[i],));
-        print("items" + items[0].Name);
-      });
-    }
-    print(Names);
-    print(Images);
-  }
-
-  Future<dynamic> getWhichRecipeToDelete(int index) async {
-    final ref = FirebaseDatabase.instance.ref();
-    var snapshotDelete;
-    for (int i =0; i< items.length+globals.NoOfDeletedItems; i++)
-    {
-
-      snapshotDelete  = await ref.child('Recipes/Recipe$i/Name').get();
-      if(items[index].Name == snapshotDelete.value.toString())
-      {
-        fb.child('Recipe$i').remove();
-        setState(() {
-          items.removeAt(index);
-        });
-        break;
-      }
-    }
-  }
+  final DatabaseReference _recipesRef = LanguageGlobalByAdmin.isEnglish?
+  FirebaseDatabase.instance.reference().child('Recipes') :  FirebaseDatabase.instance.reference().child('RecipesArabic');
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +51,7 @@ class _ShowRecipesState extends State<ShowRecipes> {
                 child: Container(
                     margin: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      "Recipes",
+                      "Recipes".tr,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -130,10 +59,116 @@ class _ShowRecipesState extends State<ShowRecipes> {
                       ),
                     ))),
             Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: SizedBox(
-                  height: 530,
-                  child: buildList(),
+              margin: EdgeInsets.only(bottom: 20),
+              child: SizedBox(
+                height: 530,
+                child: StreamBuilder(
+                  stream: _recipesRef.onValue,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
+                      Map<dynamic, dynamic> values =
+                      snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+                      List<dynamic> recipeList = values.values.toList();
+                      return ListView.builder(
+                        itemCount: recipeList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          MapEntry<dynamic, dynamic> recipeEntry =
+                          values.entries.elementAt(index);
+                          Map<dynamic, dynamic> recipeMap =
+                          recipeEntry.value as Map<dynamic, dynamic>;
+                          // Map<dynamic, dynamic> recipeMap =
+                          // recipeList[index] as Map<dynamic, dynamic>;
+                          if(recipeMap['Name'].toString() == "null")
+                          {
+                            print("namenull?");
+                            print(recipeMap['Name'] );
+                            return Text("");
+                          }
+                          else
+                          {
+                            print("name?");
+                            print(recipeMap['Name'] );
+                            return
+                              Container(
+                                height: 70,
+                                child: GestureDetector(
+                                  onTap: ()
+                                  {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                                        RecipeDetailsForAdminPanel(RecipeName:recipeMap['Name'] ,
+                                          RecipeAllergiesContained: recipeMap['ContainedAllergyType'],
+                                          RecipeImage: recipeMap['image'],
+                                          RecipeDirections: recipeMap['Directions'],
+                                          RecipeDuration: recipeMap['Duration'], RecipeIngredients: recipeMap['Ingredients'],
+                                            )));
+                                  },
+                                  child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      child: ListTile(
+                                        title: Container(
+                                          child: Text(
+                                            recipeMap['Name'],
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+
+                                        // leading: items[index].image,
+                                        leading: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minWidth: 44,
+                                            minHeight: 44,
+                                            maxWidth: 64,
+                                            maxHeight: 64,
+                                          ),
+                                          child: Image.network(
+                                            recipeMap['image'],
+                                            width: 100,
+                                            height: 100,
+                                          ),
+                                        ),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [IconButton(icon: Icon(Icons.edit),
+                                            onPressed: () {
+                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                                  EditRecipe(
+                                                    itemsLength: recipeList.length,
+                                                    EditRecipeName: recipeMap['Name'],
+                                                    EditRecipeImage: recipeMap['image'],
+                                                    EditRecipeIngredients: recipeMap['Ingredients'],
+                                                    EditRecipeDirections: recipeMap['Directions'],
+                                                    EditRecipeDuration: recipeMap['Duration'],
+                                                    EditRecipeAllergiesContained: recipeMap['ContainedAllergyType'],
+                                                  )));
+                                            },),
+                                            IconButton(icon: Icon(Icons.delete),
+                                              onPressed: () {
+                                                _recipesRef.child(recipeEntry.key!).remove();
+                                              },)],
+                                        ),
+                                      )),
+                                ),
+                              );
+
+                          }
+
+                        },
+                      );
+
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error retrieving recipe data'),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
               ),
             )
           ],
@@ -151,68 +186,9 @@ class _ShowRecipesState extends State<ShowRecipes> {
     );
   }
 
-  Widget buildList() =>
-      ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return  Container(
-                height: 70,
-                child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: ListTile(
-                      title: Container(
-                        child: Text(
-                          items[index].Name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-
-                      // leading: items[index].image,
-                      leading: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 44,
-                          minHeight: 44,
-                          maxWidth: 64,
-                          maxHeight: 64,
-                        ),
-                        child: items[index].image,
-                      ),
-                      // leading: CircleAvatar(
-                      //     radius: 30,
-                      //     backgroundImage: items[index].image as ImageProvider),
-                      // NetworkImage(
-                      // Image.network('https://logos-download.com/wp-content/uploads/2016/03/KFC_Logo_2006.png')),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [IconButton(icon: Icon(Icons.edit),
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                EditRecipe(EditRecipeName: items[index].Name,
-                                  EditRecipeImage: Images[index],
-                                  EditRecipeIngredients: items[index].ingredients,
-                                  EditRecipeDirections: items[index].direction,
-                                  EditRecipeDuration: items[index].duration,
-                                  EditRecipeAllergiesContained: items[index].containedAllery, itemsLength: items.length,  )));
-                          },),
-                          IconButton(icon: Icon(Icons.delete),
-                            onPressed: () {
-                              globals.NoOfDeletedItems++;
-                              getWhichRecipeToDelete(index);
-
-                            },)],
-                      ),
-                    )),
-            );
-          });
-
-
   @override
   void initState() {
+    globalsFromUser.FromUser=0;
     super.initState();
-    getCurrentUserInfo();
   }
-
 }

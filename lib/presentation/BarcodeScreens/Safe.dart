@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import '../TextRecognition/Main-TextRecognition_2.dart';
 import 'BarcodeScanner.dart';
@@ -37,8 +38,7 @@ class Safe extends StatelessWidget {
                 Container(
                     margin: const EdgeInsets.only(left: 0, right:0, top: 60, bottom: 30), alignment: Alignment.center,
 
-
-                    child: Image(image: AssetImage('Assets/Images/AllergyFree.png',
+                    child: Image(image: AssetImage('Assets/Images/AllergenFree.png',
                     ),
                     )
                 ),
@@ -57,7 +57,7 @@ class Safe extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> BarcodeScanner()));
 
                   },
-                    child: Text("OK",
+                    child: Text("OK".tr,
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,

@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../pages/home_page.dart';
+import '../Admin/AdminHomePage/AdminHomePage.dart';
 import '../HomeScreen/HomeScreen.dart';
 import '../loginScreen/loginScreen.dart';
 import '../mainScreen/MainScreen.dart';
@@ -38,6 +41,12 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
   bool Almonds = false;
   bool Crustaceans = false;
 
+  bool EggYolk = false;
+  bool EggWhite = false;
+
+  bool MilkCasein = false;
+  bool MilkWhey = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +64,8 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 24, bottom: 20),
 
-                child: const Text(
-                  'Please, select your food allergy/ies',
+                child:  Text(
+                  'Please, select your food allergy/ies'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -68,12 +77,12 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                     children: [
                       Container(
                         height: 300,
-                        width: 150,
+                        width: 160,
                         child: ListView(
                               children: [
                                 CheckboxListTile(
 
-                                  title: const Text("Milk"),
+                                  title:  Text("Milk".tr),
                                   value: Milk,
                                   activeColor: Colors.teal,
                                   onChanged: (value) {
@@ -84,7 +93,30 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                   controlAffinity: ListTileControlAffinity.leading,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text("Fish"),
+
+                                  title:  Text("EggYolk".tr),
+                                  value: EggYolk,
+                                  activeColor: Colors.teal,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      EggYolk = value!;
+                                    });
+                                  },
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                ),
+                                CheckboxListTile(
+                                  title:  Text("EggWhite".tr),
+                                  value: EggWhite,
+                                  activeColor: Colors.teal,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      EggWhite = value!;
+                                    });
+                                  },
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                ),
+                                CheckboxListTile(
+                                  title:  Text("Fish".tr),
                                   value: Fish,
                                   activeColor: Colors.teal,
                                   onChanged: (value) {
@@ -95,7 +127,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                   controlAffinity: ListTileControlAffinity.leading,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text("Eggs"),
+                                  title:  Text("Egg".tr),
                                   value: Eggs,
                                   activeColor: Colors.teal,
                                   onChanged: (value) {
@@ -106,7 +138,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                   controlAffinity: ListTileControlAffinity.leading,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text("Peanuts"),
+                                  title:  Text("Peanut".tr),
                                   value: Peanuts,
                                   activeColor: Colors.teal,
                                   onChanged: (value) {
@@ -117,7 +149,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                   controlAffinity: ListTileControlAffinity.leading,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text("Nut"),
+                                  title:  Text("Nut".tr),
                                   value: Nut,
                                   activeColor: Colors.teal,
                                   onChanged: (value) {
@@ -128,7 +160,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                   controlAffinity: ListTileControlAffinity.leading,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text("Corn"),
+                                  title:  Text("Corn".tr),
                                   value: Corn,
                                   activeColor: Colors.teal,
                                   onChanged: (value) {
@@ -148,7 +180,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                         child: ListView(
                             children: [
                               CheckboxListTile(
-                                title: const Text("Strawberry"),
+                                title:  Text("Strawberry".tr),
                                 value: Strawberry,
                                 activeColor: Colors.teal,
                                 onChanged: (value) {
@@ -159,7 +191,29 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                 controlAffinity: ListTileControlAffinity.leading,
                               ),
                               CheckboxListTile(
-                                title: const Text("Soy"),
+                                title:  Text("MilkCasein".tr),
+                                value: MilkCasein,
+                                activeColor: Colors.teal,
+                                onChanged: (value) {
+                                  setState(() {
+                                    MilkCasein = value!;
+                                  });
+                                },
+                                controlAffinity: ListTileControlAffinity.leading,
+                              ),
+                              CheckboxListTile(
+                                title:  Text("MilkWhey".tr),
+                                value: MilkWhey,
+                                activeColor: Colors.teal,
+                                onChanged: (value) {
+                                  setState(() {
+                                    MilkWhey = value!;
+                                  });
+                                },
+                                controlAffinity: ListTileControlAffinity.leading,
+                              ),
+                              CheckboxListTile(
+                                title:  Text("Soy".tr),
                                 value: Soy,
                                 activeColor: Colors.teal,
                                 onChanged: (value) {
@@ -170,7 +224,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                 controlAffinity: ListTileControlAffinity.leading,
                               ),
                               CheckboxListTile(
-                                title: const Text("Wheat"),
+                                title:  Text("Wheat".tr),
                                 value: Wheat,
                                 activeColor: Colors.teal,
                                 onChanged: (value) {
@@ -181,7 +235,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                 controlAffinity: ListTileControlAffinity.leading,
                               ),
                               CheckboxListTile(
-                                title: const Text("Gluten"),
+                                title:  Text("Gluten".tr),
                                 value: Gluten,
                                 activeColor: Colors.teal,
                                 onChanged: (value) {
@@ -193,7 +247,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                               ),
 
                               CheckboxListTile(
-                                title: const Text("Almonds"),
+                                title:  Text("Almond".tr),
                                 value: Almonds,
                                 activeColor: Colors.teal,
                                 onChanged: (value) {
@@ -204,7 +258,7 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                                 controlAffinity: ListTileControlAffinity.leading,
                               ),
                               CheckboxListTile(
-                                title: const Text("Crustaceans"),
+                                title:  Text("Crustacean".tr),
                                 value: Crustaceans,
                                 activeColor: Colors.teal,
                                 onChanged: (value) {
@@ -232,12 +286,40 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                       backgroundColor: Color(0xFF16CD54)),
                   onPressed: () {
                     if(Milk || Fish || Eggs || Peanuts || Nut || Corn || Strawberry || Soy
-                        || Wheat || Gluten || Almonds || Crustaceans)
+                        || Wheat || Gluten || Almonds || Crustaceans || EggYolk || EggWhite || MilkWhey || MilkCasein)
                       {
                         inputData();
 
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0,
-                          drawer: true,)));
+                        if(widget.EmailController.text == "Aliaa2000@yahoo.com" && widget.PasswordController.text == "12345678" ||
+                            widget.EmailController.text == "Maram350@yahoo.com" && widget.PasswordController.text == "12345678")
+                        {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                            return loginScreen();
+                          }));
+
+                          // nextScreenReplace(context,  HomePage(profileVisible: false, CreateGroupButton: true,));
+                        }
+                        else if(widget.EmailController.text == "jano33@yahoo.com" && widget.PasswordController.text == "12345678")
+                        {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                            return AdminHomePage();
+                          }));
+
+                        }
+
+                        else if(widget.EmailController.text == "haidy50@yahoo.com" && widget.PasswordController.text == "12345678")
+                        {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                            return HomePage(profileVisible: false, CreateGroupButton: true);
+                          }));
+
+                        }
+                        else
+                          {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen(Current: 0,
+                              drawer: true,)));
+                          }
+
                         }
 
                     else
@@ -246,33 +328,12 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
                       }
                       },
 
-                 child: Text("Sign Up",
+                 child: Text("Save".tr,
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,),),),
                 ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: <Widget>[
-            //     const Text('Already have an account?'),
-            //     TextButton(
-            //       style: TextButton.styleFrom(foregroundColor: Colors.black),
-            //       onPressed: () {
-            //         //Login screen
-            //       },
-            //       // onHover: (),
-            //       child: TextButton(onPressed:(){
-            //         Navigator.push(context, MaterialPageRoute(builder: (context)=> loginScreen()));
-            //       },
-            //           style: TextButton.styleFrom(
-            //             primary: Colors.black,
-            //           ),child:const Text("Login ", style:
-            //       TextStyle(
-            //           fontWeight: FontWeight.bold
-            //       ),),
-            //     )
-            //   )],
-            // ),
+
           ],
         ) ,
     ));
@@ -292,8 +353,12 @@ class _SelectAllergyScreen extends State<SelectAllergyScreen> {
     await reference.set({
       "Allergies": {
         "Milk Allergy": Milk,
+        "MilkWhey Allergy":MilkWhey,
+        "MilkCasein Allergy":MilkCasein,
         "Fish Allergy": Fish,
         "Eggs Allergy": Eggs,
+        "EggWhite Allergy": EggWhite,
+        "EggYolk Allergy": EggYolk,
         "Peanuts Allergy": Peanuts,
 
         "Strawberry Allergy": Strawberry,

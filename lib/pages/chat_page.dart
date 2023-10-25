@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../service/database_service.dart';
 import '../widgets/message_tile.dart';
@@ -85,8 +86,8 @@ class _ChatPageState extends State<ChatPage> {
                     child: TextFormField(
                   controller: messageController,
                   style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: "Send a message...",
+                  decoration:  InputDecoration(
+                    hintText: "Send a message".tr,
                     hintStyle: TextStyle(color: Colors.white, fontSize: 16),
                     border: InputBorder.none,
                   ),

@@ -61,18 +61,21 @@ class HomeNotifer with ChangeNotifier {
       await textDetector.processImage(inputImage);
 
       // ignore: unused_local_variable
-      String text = recognisedText.text;
+      String text = recognisedText.text.toLowerCase();
 
-      if (text.contains("Alcohol")) {
-        print('This Product Contains Alcohol.');
-        return 1;
-        // Navigator.of(context).pushReplacementNamed('/Users/aliaakaram/Desktop/text_extract_google_mi_kit/lib/presentation/BarcodeScreens/NotSafe');
+      var AlcoholAlternatives = ["alcohol","ethanol","spirits","liquor", "wine","beer","distilled","fermented"];
 
-      } else {
-        print('This Product does not contain Alcohol.');
-        return 0;
-      }
+      for(int i =0; i<AlcoholAlternatives.length; i++)
+        {
+          if(text.contains(AlcoholAlternatives[i]))
+            {
+              print('This Product Contains Alcohol.');
+              return 1;
+            }
+        }
 
+      print('This Product does not contain Alcohol.');
+      return 0;
 
     } else {
       showInfo(context: context, text: 'Please Select A Image');

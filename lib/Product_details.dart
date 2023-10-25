@@ -2,22 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/CategoriesScreen/CategoriesScreen.dart';
 import 'package:graduationproject26_1/presentation/mainScreen/MainScreen.dart';
-
+import 'package:graduationproject26_1/presentation/mainScreen/MainScreen2.dart';
+import 'presentation/CategoriesScreen/globals.dart' as globals;
+import 'presentation/Admin/AdminHomePage/globals.dart' as AdminGlobals;
 
 class Product_details extends StatelessWidget {
   final ModelCategory detailsModel;
 
   Product_details({Key? key, required this.detailsModel}) : super(key: key);
 
-  // List<ModelCategory> detailsModel=[];
-  List<String> ingrediants = [
-    "Water",
-    "Coconut",
-    "Rice",
-    "stabilizers",
-    "acidity regulator",
-    "Flavor"
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +87,7 @@ class Product_details extends StatelessWidget {
                   style: TextStyle(
                       color: Color.fromRGBO(131, 131, 131, 0.8),
                       fontSize: 15),
-                  detailsModel.description),
+                  detailsModel.ingredients),
             ),
             SizedBox(
               height: 10,
@@ -160,9 +154,35 @@ class Product_details extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                  MainScreen(Current: 0, drawer: true,)));
+              if(globals.fromUser == 1) {
+                if(AdminGlobals.WhichMainScreen2 ==1)
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      MainScreen2(Current: 0)));
+                }
+                else
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      MainScreen(Current: 0, drawer: true,)));
+                }
 
+
+              }
+
+              else if(globals.fromUser ==2)
+              {
+                if(AdminGlobals.WhichMainScreen2 ==1)
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      MainScreen2(Current: 3)));
+                }
+                else
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      MainScreen(Current: 3, drawer: true,)));
+                }
+
+              }
 
 
             },

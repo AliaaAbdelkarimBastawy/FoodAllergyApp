@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:graduationproject26_1/presentation/Admin/AdminHomePage/AdminHomePage.dart';
 import 'package:graduationproject26_1/presentation/profileScreen/profileScreen.dart';
-
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
 class EditLanguageScreen extends StatefulWidget {
   EditLanguageScreen({Key? key}) : super(key: key);
 
@@ -9,8 +10,7 @@ class EditLanguageScreen extends StatefulWidget {
 }
 
 class _EditLanguageScreenState extends State<EditLanguageScreen> {
-
-  String def = "English";
+  String def = LanguageGlobalByAdmin.isEnglish? "English" : "Arabic";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +22,7 @@ class _EditLanguageScreenState extends State<EditLanguageScreen> {
           ),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()));
+                MaterialPageRoute(builder: (context) => AdminHomePage()));
           },
         ),
         backgroundColor: const Color(0xFF16CD54),
@@ -54,6 +54,7 @@ class _EditLanguageScreenState extends State<EditLanguageScreen> {
                 onChanged: (value){
                   setState(() {
                     def = value.toString();
+                    LanguageGlobalByAdmin.isEnglish = false;
                   });
                 },
               ),
@@ -65,6 +66,7 @@ class _EditLanguageScreenState extends State<EditLanguageScreen> {
                 onChanged: (value){
                   setState(() {
                     def = value.toString();
+                    LanguageGlobalByAdmin.isEnglish = true;
                   });
                 },
               ),

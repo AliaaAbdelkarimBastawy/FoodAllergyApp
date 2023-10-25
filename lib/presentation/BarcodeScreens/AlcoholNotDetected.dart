@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import '../../Alcohol-TextRecognition/Main-TextRecognition.dart';
 import 'BarcodeScanner.dart';
@@ -52,7 +53,7 @@ class AlcoholNotDetected extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> BarcodeScanner()));
 
                   },
-                    child: Text("OK",
+                    child: Text("OK".tr,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,

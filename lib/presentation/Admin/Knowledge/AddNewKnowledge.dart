@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject26_1/presentation/Admin/Knowledge/ShowKnowledge.dart';
 import 'package:graduationproject26_1/presentation/Admin/DishesCounterGlobal.dart' as globalsDishesCounter;
+import 'package:graduationproject26_1/SelectLanguageByAdmin.dart' as LanguageGlobalByAdmin;
+
 
 class AddNewKnowledge extends StatelessWidget {
    AddNewKnowledge({Key? key}) : super(key: key);
@@ -10,36 +12,65 @@ class AddNewKnowledge extends StatelessWidget {
    var KnowledgeDescription = TextEditingController();
    var KnowledgeImage = TextEditingController();
 
-   final fb = FirebaseDatabase.instance.reference().child("Knowledge");
+   final fb = LanguageGlobalByAdmin.isEnglish?
+   FirebaseDatabase.instance.reference().child("Knowledge")
+       : FirebaseDatabase.instance.reference().child("KnowledgeArabic");
 
    Future<dynamic> AddKnowledge() async {
      final ref = FirebaseDatabase.instance.ref();
      var snapshot;
-     int KnowledgeCount;
+     int RecipeCount;
      snapshot = await ref.child('Knowledge/KnowledgeCounter/Counter').get();
      globalsDishesCounter.KnowledgeCounter= int.parse(snapshot.value.toString());
-     KnowledgeCount =  globalsDishesCounter.KnowledgeCounter;
+     RecipeCount =  globalsDishesCounter.KnowledgeCounter;
 
-     Map<String, String> knowledge =
+     Map<String, String> recipes =
      {
        'Name' : KnowledgeTitle.text,
        'Image' : KnowledgeImage.text,
        'Description': KnowledgeDescription.text,
-
      };
 
-     fb.child("Knowledge$KnowledgeCount").set(knowledge);
+     fb.child("Knowledge$RecipeCount").set(recipes);
 
-     KnowledgeCount++;
+     RecipeCount++;
 
-     print(KnowledgeCount);
+     print(RecipeCount);
      Map<String, String> count =
      {
-       'Counter' : KnowledgeCount.toString(),
+       'Counter' : RecipeCount.toString(),
      };
 
      fb.child("KnowledgeCounter").set(count);
-     globalsDishesCounter.KnowledgeCounter++;
+     globalsDishesCounter.RecipeCounter++;
+   }
+   Future<dynamic> AddKnowledgeArabic() async {
+     final ref = FirebaseDatabase.instance.ref();
+     var snapshot;
+     int RecipeCount;
+     snapshot = await ref.child('KnowledgeArabic/KnowledgeCounter/Counter').get();
+     globalsDishesCounter.KnowledgeCounter= int.parse(snapshot.value.toString());
+     RecipeCount =  globalsDishesCounter.KnowledgeCounter;
+
+     Map<String, String> recipes =
+     {
+       'Name' : KnowledgeTitle.text,
+       'Image' : KnowledgeImage.text,
+       'Description': KnowledgeDescription.text,
+     };
+
+     fb.child("Knowledge$RecipeCount").set(recipes);
+
+     RecipeCount++;
+
+     print(RecipeCount);
+     Map<String, String> count =
+     {
+       'Counter' : RecipeCount.toString(),
+     };
+
+     fb.child("KnowledgeCounter").set(count);
+     globalsDishesCounter.RecipeCounter++;
    }
 
    @override
@@ -116,7 +147,18 @@ class AddNewKnowledge extends StatelessWidget {
                clipBehavior: Clip.antiAliasWithSaveLayer,
                child: MaterialButton(
                  onPressed: () {
-                   AddKnowledge();
+                   if(LanguageGlobalByAdmin.isEnglish == true)
+                     {
+                       AddKnowledge();
+
+                     }
+                   else
+                     {
+                       AddKnowledgeArabic();
+
+                     }
+                   Navigator.pop(context);
+
                  },
                  child: Text("Add",
                    style: TextStyle(

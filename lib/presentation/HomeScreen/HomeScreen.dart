@@ -3,15 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../Product_details.dart';
-import '../../data/homeScreen/homeScreenViewModel.dart';
 import '../CategoriesScreen/CategoriesScreen.dart';
-import '../MenuScreen/AllergenMenuScreen.dart';
-import '../MenuScreen/MenuScreen.dart';
-import '../RecipesScreen/RecipesScreen.dart';
 import '../loginScreen/loginScreen.dart';
-import '../recipesDetails/recipes_Details.dart';
-
-
+import 'MenuScreen_FromHomePage.dart';
+import 'RecipeDetails_FromHomePage.dart';
+import 'RecipeModel.dart';
+import 'RestaurantModel.dart';
+import '../CategoriesScreen/globals.dart' as globals;
+import '../Admin/Restaurant/FromUserOrAdminFile.dart' as globalsFromUser;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,6 +29,8 @@ class ModelHome {
 }
 
 
+
+
 class _HomeScreenState extends State<HomeScreen> {
 
   List<List<ModelCategory>> list = [];
@@ -40,22 +41,28 @@ class _HomeScreenState extends State<HomeScreen> {
   static List<String> BakeryImages = [];
   static List<String> BakeryDescription = [];
   static List<String> BakeryAllergyContained = [];
+  static List<String> BakeryIngredients = [];
+
 
   static List<String> MilkNames = [];
   static List<String> MilkImages = [];
   static List<String> MilkDescription = [];
   static List<String> MilkAllergyContained = [];
+  static List<String> MilkIngredients = [];
+
 
   static List<String> ProteinsNames = [];
   static List<String> ProteinsImages = [];
   static List<String> ProteinDescription = [];
   static List<String> ProteinAllergyContained = [];
+  static List<String> ProteinIngredients = [];
+
 
   static List<String> SnacksNames = [];
   static List<String> SnacksImages = [];
   static List<String> SnacksDescription = [];
   static List<String> SnacksAllergyContained = [];
-
+  static List<String> SnacksIngredients = [];
 
   //////////////////////////
   List<MenuModel> listmenu = [];
@@ -80,11 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
   height: 80,
   ),
       description: "Make your breakfast interesting with Nutella hazelnut spread with cocoa.  Packed with the richness of selected hazelnuts and delicious cocoa, it is the most trusted breakfast spread brand across the world.  Nutella can be easily spread over bread, roti, dosa or idli and variety of other breakfast dishes.  It is 100% vegetarian and contains no preservatives.",
-      containedOf: "Hazelnut, Milk")];
+      containedOf: "Hazelnut, Milk", ingredients: 'Milk')];
 
 
 
-  final fb = FirebaseDatabase.instance.reference().child("Categories");
+  final fb = FirebaseDatabase.instance.reference().child("Category");
   final fb1 = FirebaseDatabase.instance.reference().child("Menus");
   final fb2 = FirebaseDatabase.instance.reference().child("Recipes");
 
@@ -114,10 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   Future<dynamic> getCurrentUserInfo() async {
-    /* CategoryList.clear();
-    MenusList.clear();
-    RecipesList.clear();*/
-
+    MilkList.clear();
+    SnacksList.clear();
+    ProteinList.clear();
     BakeryList.clear();
     MergeList.clear();
 
@@ -138,105 +144,121 @@ class _HomeScreenState extends State<HomeScreen> {
     var snapshot14;
     var snapshot15;
     var snapshot16;
+    var snapshot17;
+    var snapshot18;
+    var snapshot19;
+    var snapshot20;
 
     BakeryNames.clear();
     BakeryImages.clear();
     BakeryDescription.clear();
     BakeryAllergyContained.clear();
+    BakeryIngredients.clear();
 
     MilkImages.clear();
     MilkNames.clear();
     MilkDescription.clear();
     MilkAllergyContained.clear();
+    MilkIngredients.clear();
+
 
     ProteinsNames.clear();
     ProteinsImages.clear();
     ProteinDescription.clear();
     ProteinAllergyContained.clear();
+    ProteinIngredients.clear();
+
 
     SnacksNames.clear();
     SnacksImages.clear();
     SnacksDescription.clear();
     SnacksAllergyContained.clear();
-
-    for (int i = 1; i < 10; i++) {
-      snapshot = await ref.child('Products/Bakery/Item$i/Name').get();
-      snapshot2 = await ref.child('Products/Bakery/Item$i/image').get();
-
-      snapshot3 = await ref.child('Products/Milk/Item$i/Name').get();
-      snapshot4 = await ref.child('Products/Milk/Item$i/image').get();
-
-      BakeryNames.add(snapshot.value.toString());
-      BakeryImages.add(snapshot2.value.toString());
-
-      MilkNames.add(snapshot3.value.toString());
-      MilkImages.add(snapshot4.value.toString());
-
-      snapshot5 = await ref.child('Products/Protein/Item$i/Name').get();
-      snapshot6 = await ref.child('Products/Protein/Item$i/image').get();
-
-      snapshot7 = await ref.child('Products/Snacks/Item$i/Name').get();
-      snapshot8 = await ref.child('Products/Snacks/Item$i/image').get();
+    SnacksIngredients.clear();
 
 
-      snapshot9 = await ref.child('Products/Bakery/Item$i/contains').get();
-      snapshot10 = await ref.child('Products/Bakery/Item$i/description').get();
+    for (int i = 1; i < 20; i++) {
+      snapshot = await ref.child('Category/Category1/Item$i/Name').get();
+      snapshot2 = await ref.child('Category/Category1/Item$i/image').get();
+
+      snapshot3 = await ref.child('Category/Category2/Item$i/Name').get();
+      snapshot4 = await ref.child('Category/Category2/Item$i/image').get();
+
+      snapshot5 = await ref.child('Category/Category3/Item$i/Name').get();
+      snapshot6 = await ref.child('Category/Category3/Item$i/image').get();
+
+      snapshot7 = await ref.child('Category/Category4/Item$i/Name').get();
+      snapshot8 = await ref.child('Category/Category4/Item$i/image').get();
 
 
-      snapshot11 = await ref.child('Products/Milk/Item$i/contains').get();
-      snapshot12 = await ref.child('Products/Milk/Item$i/description').get();
+      snapshot9 = await ref.child('Category/Category1/Item$i/contains').get();
+      snapshot10 = await ref.child('Category/Category1/Item$i/description').get();
+      snapshot17 = await ref.child('Category/Category1/Item$i/ingredients').get();
 
 
-      snapshot13= await ref.child('Products/Snacks/Item$i/contains').get();
-      snapshot14 = await ref.child('Products/Snacks/Item$i/description').get();
+      snapshot11 = await ref.child('Category/Category2/Item$i/contains').get();
+      snapshot12 = await ref.child('Category/Category2/Item$i/description').get();
+      snapshot18 = await ref.child('Category/Category2/Item$i/ingredients').get();
 
 
-      snapshot15 = await ref.child('Products/Protein/Item$i/contains').get();
-      snapshot16 = await ref.child('Products/Protein/Item$i/description').get();
+      snapshot13= await ref.child('Category/Category4/Item$i/contains').get();
+      snapshot14 = await ref.child('Category/Category4/Item$i/description').get();
+      snapshot19 = await ref.child('Category/Category4/Item$i/ingredients').get();
 
 
-      ProteinsNames.add(snapshot5.value.toString());
-      ProteinsImages.add(snapshot6.value.toString());
+      snapshot15 = await ref.child('Category/Category3/Item$i/contains').get();
+      snapshot16 = await ref.child('Category/Category3/Item$i/description').get();
+      snapshot20 = await ref.child('Category/Category3/Item$i/ingredients').get();
 
-      SnacksNames.add(snapshot7.value.toString());
-      SnacksImages.add(snapshot8.value.toString());
 
-      BakeryAllergyContained.add(snapshot9.value.toString());
-      BakeryDescription.add(snapshot10.value.toString());
+      if(snapshot.value.toString() != "null")
+      {
+        BakeryNames.add(snapshot.value.toString());
+        BakeryImages.add(snapshot2.value.toString());
+        BakeryAllergyContained.add(snapshot9.value.toString());
+        BakeryDescription.add(snapshot10.value.toString());
+        BakeryIngredients.add(snapshot17.value.toString());
+      }
 
-      MilkAllergyContained.add(snapshot11.value.toString());
-      MilkDescription.add(snapshot12.value.toString());
 
-      SnacksAllergyContained.add(snapshot13.value.toString());
-      SnacksDescription.add(snapshot14.value.toString());
 
-      ProteinAllergyContained.add(snapshot15.value.toString());
-      ProteinDescription.add(snapshot16.value.toString());
+      if(snapshot3.value.toString() != "null")
+      {
+        MilkNames.add(snapshot3.value.toString());
+        MilkImages.add(snapshot4.value.toString());
+        MilkAllergyContained.add(snapshot11.value.toString());
+        MilkDescription.add(snapshot12.value.toString());
+        MilkIngredients.add(snapshot18.value.toString());
+      }
+
+
+
+      if(snapshot5.value.toString() != "null")
+      {
+        ProteinsNames.add(snapshot5.value.toString());
+        ProteinsImages.add(snapshot6.value.toString());
+        ProteinAllergyContained.add(snapshot15.value.toString());
+        ProteinDescription.add(snapshot16.value.toString());
+        ProteinIngredients.add(snapshot20.value.toString());
+      }
+
+
+
+      if(snapshot7.value.toString() != "null")
+      {
+        SnacksNames.add(snapshot7.value.toString());
+        SnacksImages.add(snapshot8.value.toString());
+        SnacksAllergyContained.add(snapshot13.value.toString());
+        SnacksDescription.add(snapshot14.value.toString());
+        SnacksIngredients.add(snapshot19.value.toString());
+
+      }
+
+
 
     }
 
+
     for (int i = 0; i < MilkNames.length; i++) {
-      setState(() {
-        BakeryList.add(new ModelCategory(
-            Name: BakeryNames[i],
-            image: Image.network(
-              BakeryImages[i],
-              width: 80,
-              height: 80,
-            ),
-            description: BakeryDescription[i],
-            containedOf: BakeryAllergyContained[i]
-        ),);
-        MergeList.add(new ModelCategory(
-            Name: BakeryNames[i],
-            image: Image.network(
-              BakeryImages[i],
-              width: 80,
-              height: 80,
-            ),
-            description: BakeryDescription[i],
-            containedOf: BakeryAllergyContained[i]
-        ),);
 
         MilkList.add(new ModelCategory(
             Name: MilkNames[i],
@@ -246,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 80,
             ),
             description: MilkDescription[i],
-            containedOf: MilkAllergyContained[i]
+            containedOf: MilkAllergyContained[i], ingredients: MilkIngredients[i]
 
         ));
         MergeList.add(new ModelCategory(
@@ -257,108 +279,139 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 80,
             ),
             description: MilkDescription[i],
-            containedOf: MilkAllergyContained[i]
+            containedOf: MilkAllergyContained[i], ingredients: MilkIngredients[i]
 
         ));
+    }
 
+    for (int i = 0; i < BakeryNames.length; i++) {
+        BakeryList.add(new ModelCategory(
+            Name: BakeryNames[i],
+            image: Image.network(
+              BakeryImages[i],
+              width: 80,
+              height: 80,
+            ),
+            description: BakeryDescription[i],
+            containedOf: BakeryAllergyContained[i], ingredients: BakeryIngredients[i]
+        ),);
+        MergeList.add(new ModelCategory(
+            Name: BakeryNames[i],
+            image: Image.network(
+              BakeryImages[i],
+              width: 80,
+              height: 80,
+            ),
+            description: BakeryDescription[i],
+            containedOf: BakeryAllergyContained[i], ingredients: BakeryIngredients[i]
+        ),);
+
+
+    }
+
+
+    for (int i = 0; i < ProteinsNames.length; i++) {
         ProteinList.add(new ModelCategory(
             Name: ProteinsNames[i],
             image: Image.network(
               ProteinsImages[i],
-              width: 70,
-              height: 70,
+              width: 80,
+              height: 80,
             ),
             description: ProteinDescription[i],
-            containedOf: ProteinAllergyContained[i]
+            containedOf: ProteinAllergyContained[i], ingredients: ProteinIngredients[i]
         ));
         MergeList.add(new ModelCategory(
             Name: ProteinsNames[i],
             image: Image.network(
               ProteinsImages[i],
-              width: 70,
-              height: 70,
+              width: 80,
+              height: 80,
             ),
             description: ProteinDescription[i],
-            containedOf: ProteinAllergyContained[i]
+            containedOf: ProteinAllergyContained[i], ingredients: ProteinIngredients[i]
         ));
 
+    }
+
+    for (int i = 0; i < SnacksNames.length; i++) {
         SnacksList.add(new ModelCategory(
             Name: SnacksNames[i],
             image: Image.network(
               SnacksImages[i],
-              width: 70,
-              height: 70,
+              width: 80,
+              height: 80,
             ),
             description: SnacksDescription[i],
-            containedOf: SnacksAllergyContained[i]
+            containedOf: SnacksAllergyContained[i], ingredients: SnacksIngredients[i]
         ));
         MergeList.add(new ModelCategory(
             Name: SnacksNames[i],
             image: Image.network(
               SnacksImages[i],
-              width: 70,
-              height: 70,
+              width: 80,
+              height: 80,
             ),
             description: SnacksDescription[i],
-            containedOf: SnacksAllergyContained[i]
+            containedOf: SnacksAllergyContained[i], ingredients: SnacksIngredients[i]
         ));
 
-      });
+
+      print(MilkNames);
+      print(MilkImages);
+
+      print(BakeryNames);
+      print(BakeryImages);
+
+      print(ProteinsNames);
+      print(ProteinsImages);
+
+      print(SnacksNames);
+      print(SnacksImages);
+
+      print(SnacksDescription);
+      print(SnacksAllergyContained);
+
     }
 
+    //////////////////////////////////////
     items.clear();
     final ref2 = FirebaseDatabase.instance.ref();
     Names.clear();
     Images.clear();
     MenuList2.clear();
-    for (int i = 1; i < 5; i++) {
+    for (int i = 1; i < 6; i++) {
 
-      snapshot = await ref.child('Restaurants/Restaurant$i/Name').get();
-      snapshot2 = await ref.child('Restaurants/Restaurant$i/image').get();
-      //snapshot3 = await ref.child('Restaurants/Restaurant$i/Menu').get();
-      // list.clear();
-      listmenu.clear();
-      for (int j = 1; j < 4; j++) {
-        snapshot3 = await ref2.child('Restaurants/Restaurant$i/Menu/dish$j/ListOfcontainedAllergies').get();
-        snapshot4 = await ref2.child('Restaurants/Restaurant$i/Menu/dish$j/Name').get();
-        snapshot5 = await ref2.child('Restaurants/Restaurant$i/Menu/dish$j/Image').get();
-        listmenu.add(new MenuModel(
-            dishName: snapshot4.value.toString(),
-            dishImage: Image.network(snapshot5.value.toString()),
-            dishDetails: snapshot3.value.toString()));
+      snapshot = await ref2.child('Restaurants/Restaurant$i/Name').get();
+      snapshot2 = await ref2.child('Restaurants/Restaurant$i/image').get();
+
+      if(snapshot.value.toString() != "null")
+      {
+        list.clear();
+        for (int j = 1; j < 4; j++) {
+          snapshot3 = await ref2.child('Restaurants/Restaurant$i/Menu/dish$j/ListOfcontainedAllergies').get();
+          snapshot4 = await ref2.child('Restaurants/Restaurant$i/Menu/dish$j/Name').get();
+          snapshot5 = await ref2.child('Restaurants/Restaurant$i/Menu/dish$j/Image').get();
+          if(snapshot4.value.toString() != "null")
+          {
+
+            MenuList3[Names.length].add(new MenuModel(
+                dishName: snapshot4.value.toString(),
+                dishImage: Image.network(snapshot5.value.toString()),
+                dishDetails: snapshot3.value.toString()));
+          }
+
+          // print(list.length);
+        }
+
+        Names.add(snapshot.value.toString());
+        Images.add(snapshot2.value.toString());
       }
 
-      print(MenuList2.length);
-      print("Menu add ");
-      print(listmenu.length);
-      print(listmenu[0].dishName);
-      print(listmenu[1].dishName);
-      print(listmenu[2].dishName);
-      for(int k =0; k<2; k++){
-
-        // MenuList2[i].add(list[k]); //<--changed to add
-        print(listmenu[k].dishName);
-      }
-
-      MenuList3[i-1].add(listmenu[0]);
-      MenuList3[i-1].add(listmenu[1]);
-      MenuList3[i-1].add(listmenu[2]);
-
-
-      print("MENU LIST 3333" );
-      print(MenuList3.length);
-      print(MenuList3[i].length);
-
-      MenuList2.add(listmenu);
-
-      print(list);
-      Names.add(snapshot.value.toString());
-      Images.add(snapshot2.value.toString());
     }
 
     for (int i = 0; i < Names.length; i++) {
-      setState(() {
-        items.add(Model(
+      items.add(Model(
           title: Names[i],
           image: Image.network(
             Images[i],
@@ -368,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
           MenuList:MenuList3[i],
         ));
         print("items" + items[0].title);
-      });
+
     }
 ///////////////////////////////////////////
     itemsrecipes.clear();
@@ -376,7 +429,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Namesrecipes.clear();
     Imagesrecipes.clear();
-    for (int i = 1; i < 8; i++) {
+    containedAllergies.clear();
+    ingredientss.clear();
+    durations.clear();
+    directionss.clear();
+    for (int i = 1; i < 9; i++) {
       snapshot  = await refrecipe.child('Recipes/Recipe$i/Name').get();
       snapshot2 = await refrecipe.child('Recipes/Recipe$i/image').get();
       snapshot3 = await refrecipe.child('Recipes/Recipe$i/ContainedAllergyType').get();
@@ -384,12 +441,18 @@ class _HomeScreenState extends State<HomeScreen> {
       snapshot5 = await refrecipe.child('Recipes/Recipe$i/Duration').get();
       snapshot6 = await refrecipe.child('Recipes/Recipe$i/Directions').get();
 
-      Namesrecipes.add(snapshot.value.toString());
-      Imagesrecipes.add(snapshot2.value.toString());
-      containedAllergies.add(snapshot3.value.toString());
-      ingredientss.add(snapshot4.value.toString());
-      durations.add(snapshot5.value.toString());
-      directionss.add(snapshot6.value.toString());
+      print("HENABara!");
+      if(snapshot.value.toString() != "null")
+        {
+          print("HENA!");
+          Namesrecipes.add(snapshot.value.toString());
+          Imagesrecipes.add(snapshot2.value.toString());
+          containedAllergies.add(snapshot3.value.toString());
+          ingredientss.add(snapshot4.value.toString());
+          durations.add(snapshot5.value.toString());
+          directionss.add(snapshot6.value.toString());
+        }
+
     }
     for (int i = 0; i < Namesrecipes.length; i++) {
       setState(() {
@@ -423,7 +486,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: Padding(
@@ -487,7 +549,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
   Widget buildStartScreensItem1(ModelCategory model) => Padding(
     padding: const EdgeInsets.fromLTRB(0,8,0,0),
     child: Material(
@@ -520,7 +581,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             model.Name,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w300,
                                 fontFamily: "Outfit"),
@@ -544,7 +605,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 print(items[index]);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AllergenMenuScreen(
+                    builder: (context) => MenuScreen_FromHomePage(
                       detailsModel:items[index],
                     )));
               },
@@ -588,9 +649,6 @@ class _HomeScreenState extends State<HomeScreen> {
           }),
     ),
   );
-
-
-
   Widget buildStartScreensItem3(recipeModel model) => Padding(
     padding: const EdgeInsets.fromLTRB(0,8,0,0),
     child: Material(
@@ -599,7 +657,8 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           GestureDetector(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RecipeDetailScreen(detailsModel: model,)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  RecipeDetail_FromHomePage(detailsModel: model,)));
             },
             child: Container(
                 margin: const EdgeInsets.only(top: 5.0),
@@ -640,6 +699,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    globalsFromUser.FromUser=1;
+    globals.fromUser = 1;
     super.initState();
     getCurrentUserInfo();
 
